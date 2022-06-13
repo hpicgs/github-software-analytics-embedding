@@ -16,15 +16,15 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup pnpm ⚙️
-      - uses: pnpm/action-setup@v2.2.2
+        uses: pnpm/action-setup@v2.2.2
         with:
           version: 7
 
       - name: Setup Node.js ⚙️
-      uses: actions/setup-node@v2
+        uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install and Build 🔧
         run: |

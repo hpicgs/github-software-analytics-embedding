@@ -20,7 +20,7 @@ pnpm i
 pnpm run dev
 ```
 
-Handy for building and running the docker container locally
+Building and running the docker container locally
 ```
 docker run --rm -it $(docker build -q .)
 ```
