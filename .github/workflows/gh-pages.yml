@@ -24,11 +24,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: "pnpm"
-
       - name: Install and Build 🔧
         run: |
-          pnpm ci
+          pnpm install
           pnpm run build
 
       - name: Deploy 🚀
