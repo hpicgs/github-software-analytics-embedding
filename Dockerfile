@@ -2,6 +2,8 @@
 # Container image that runs your code
 FROM alpine:3.16
 
+ENV GITHUB_TOKEN $GITHUB_TOKEN
+
 RUN apk add tokei
 
 VOLUME /src
