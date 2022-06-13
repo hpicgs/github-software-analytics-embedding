@@ -15,3 +15,6 @@ dist
 # editor
 .vscode
 .idea
+
+# examples
+examples
