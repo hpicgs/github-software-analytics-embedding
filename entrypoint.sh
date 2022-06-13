@@ -1,9 +1,7 @@
-# Installing tokei
-apk add tokei
+#!/bin/bash
 
 # Use tokei to generate metrics.json
-tokei ./src -o metrics.json
-echo "metrics.json generated"
+echo $(tokei ./src -o json > metrics.json)
 
 TOKEN="${GITHUB_TOKEN:-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}"
 echo $TOKEN
@@ -15,7 +13,10 @@ IMG_PATH="sample.png"
 PAYLOAD="{\"content\": \"$(base64 -w 0 $IMG_PATH)\", \"encoding\": \"base64\"}"
 echo $PAYLOAD > "$IMG_PATH.json"
 
-echo $(echo $IMG_PATH.json | head -c 10)
+# Create BLOB for the metrics
+create_blob=$(curl -X POST -H "Authorization: token $TOKEN" -H "Content-Type: application/json" -d @metrics.json "https://api.github.com/repos/$OWNER/$REPO/git/blobs")
+echo $create_blob
+
 # Create BLOB for the image
 create_blob=$(curl -X POST -H "Authorization: token $TOKEN" -H "Content-Type: application/json" -d @$IMG_PATH.json "https://api.github.com/repos/$OWNER/$REPO/git/blobs")
 echo $create_blob

@@ -3,8 +3,10 @@ name: Generate HiViSer visualisations
 on: [push]
 
 jobs:
-  visualize:
-    name: A job to checkout and run the HiViSer action
+  test:
+    name: Run HiViSer Action
+    description: >
+      A job to checkout and run the HiViSer action
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
