@@ -11,7 +11,9 @@ jobs:
       # To use this repository's private action,
       # we must check out the repository
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
+        with:
+          path: "github-software-analytics-embedding"
 
       - name: Run HiViSer 🚀
         uses: ./ # Uses the action in the root directory
