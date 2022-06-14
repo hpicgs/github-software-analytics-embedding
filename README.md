@@ -19,3 +19,17 @@ To setup the Dashboard for development run:
 pnpm i
 pnpm run dev
 ```
+
+
+### Git blobs gh api
+
+gh api -H "Accept: application/vnd.github.v3+json" /repos/hpicgs/github-software-analytics-embedding/git/matching-refs/notes/commits
+
+gh api -H "Accept: application/vnd.github.v3+json" /repos/hpicgs/github-software-analytics-embedding/git/commits/1ff88b0dc996214148b5b98669f52cd876ea9e4a
+
+gh api --method POST -H "Accept: application/vnd.github.v3+json" /repos/hpicgs/github-software-analytics-embedding/git/blobs -f content='My metrics blob' -f encoding='utf-8'
+
+Get the blob
+```
+gh api -H "Accept: application/vnd.github.v3+json" /repos/hpicgs/github-software-analytics-embedding/git/blobs/a7553cd0a3c0f65602eb761017063c01558b4b91
+```
