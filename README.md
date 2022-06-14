@@ -33,3 +33,9 @@ Get the blob
 ```
 gh api -H "Accept: application/vnd.github.v3+json" /repos/hpicgs/github-software-analytics-embedding/git/blobs/a7553cd0a3c0f65602eb761017063c01558b4b91
 ```
+
+
+## Building and running the docker container locally
+```
+docker run --rm -it $(docker build -q .)
+```
