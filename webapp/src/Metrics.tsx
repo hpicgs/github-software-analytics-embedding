@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 export default function Metrics() {
   const [data, setData] = useState([]);
-
+  
    const getData = async () => {
     const response = await fetch("test.json")
     const data = await response.json();

@@ -26,6 +26,7 @@ jobs:
           node-version: 16
       - name: Install and Build 🔧
         run: |
+          cd webapp
           pnpm install
           pnpm run build
 
@@ -33,4 +34,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: dist # The folder the action should deploy.
+          folder: webapp/dist # The folder the action should deploy.

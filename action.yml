@@ -10,8 +10,13 @@ inputs:
       Also when generating a new PAT, select the least scopes necessary.
       [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
     default: ${{ github.token }}
+  repository_root:
+    description: >
+      The root directory of the repository.
+    default: "."
 runs:
   using: "docker"
   image: "Dockerfile"
   env:
+    REPOSITORY_ROOT: ${{ inputs.repository_root }}
     GITHUB_TOKEN: ${{ github.token }}"

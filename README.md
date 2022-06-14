@@ -16,6 +16,7 @@ npm i pnpm -g
 To setup the Dashboard for development run:
 
 ```
+cd webapp
 pnpm i
 pnpm run dev
 ```
@@ -37,5 +38,5 @@ gh api -H "Accept: application/vnd.github.v3+json" /repos/hpicgs/github-software
 
 ## Building and running the docker container locally
 ```
-docker run --rm -it $(docker build -q .)
+docker build -t analytics . && docker run -it analytics
 ```

@@ -1,15 +1,26 @@
+FROM node:16
 
-# Container image that runs your code
-FROM alpine:3.16
+# Create app directory
+WORKDIR /app
 
-ENV GITHUB_TOKEN $GITHUB_TOKEN
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY analytics/src ./src
 
-RUN apk add tokei
+COPY analytics/package.json .
+COPY analytics/tsconfig.json .
 
-VOLUME /src
+ENV REPOSITORY_ROOT .
+RUN mkdir repository
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
-COPY entrypoint.sh /entrypoint.sh
+VOLUME $REPOSITORY_ROOT /repository
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["sh", "/entrypoint.sh"]
+RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
+
+RUN npm run build
+# Bundle app source
+
+CMD [ "node", "build/index.js" ]

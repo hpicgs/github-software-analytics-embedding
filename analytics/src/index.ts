@@ -6,12 +6,15 @@ import glob from "glob";
 const globPromise = promisify(glob);
 
 async function processFiles() {
-  const files = await globPromise("./testfiles_ts/**/*.ts");
+  if(!process.env.REPOSITORY_ROOT) throw new Error('REPOSITORY_ROOT environment variable is not set');
+  console.log("REPOSITORY_ROOT=", process.env.REPOSITORY_ROOT)
+  const files = await globPromise(`${process.env.REPOSITORY_ROOT}/**/*.ts`);
 
+  console.log(files)
+  
   const csvData = [];
   for (const filename of files) {
     const file = readFileSync(filename, "utf-8");
-
     const ast = parseScript(file, { loc: true, comment: true, range: true });
     //const tokens = tokenize(file, { loc: true });
     const loc = getLoC(ast);
