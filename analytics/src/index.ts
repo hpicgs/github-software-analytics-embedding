@@ -31,7 +31,10 @@ async function processFiles() {
   writeFileSync("metrics.csv", csv);
 }
 
-processFiles();
+processFiles().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 
 /*
 Metric: Lines of Code
