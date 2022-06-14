@@ -19,4 +19,4 @@ runs:
   image: "Dockerfile"
   env:
     REPOSITORY_ROOT: ${{ inputs.repository_root }}
-    GITHUB_TOKEN: ${{ github.token }}"
+    GITHUB_TOKEN: ${{ inputs.token }}"
