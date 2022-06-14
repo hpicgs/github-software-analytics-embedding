@@ -8,10 +8,4 @@ parserOptions:
 plugins:
   - "@typescript-eslint"
 extends: "eslint:recommended"
-rules:
-  complexity:
-    - warn
-    - 1
-  max-lines:
-    - warn
-    - 15
+
