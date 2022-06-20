@@ -26,4 +26,6 @@ RUN pnpm install
 RUN pnpm run build
 # Bundle app source
 
-CMD [ "node", "build/index.js" ]
+RUN echo $(ls -aR)
+
+CMD [ "node", "analytics/build/index.js" ]
