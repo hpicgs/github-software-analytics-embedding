@@ -1,0 +1,17 @@
+body {
+    background-color: #282c34;
+    color: white;
+    padding: 40px;
+    font-family: Arial;
+    text-align: left;
+  }
+h1{
+    text-align: center;
+}
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    border-width: 2px;
+    border-color: white;
+    border-style: solid;
+  }
