@@ -3,7 +3,9 @@ FROM node:16
 RUN npm install -g pnpm
 
 # Create app directory
-WORKDIR /analytics
+
+ARG workdir=/github/workspace
+WORKDIR $workdir
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -28,4 +30,4 @@ RUN pnpm run build
 
 RUN echo $(ls -aR)
 
-CMD [ "node", "analytics/build/index.js" ]
+CMD [ "node", "build/index.js" ]
