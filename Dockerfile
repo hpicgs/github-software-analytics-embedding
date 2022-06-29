@@ -14,7 +14,4 @@ COPY analytics/tsconfig.json .
 RUN pnpm install
 RUN pnpm run build
 
-RUN echo $(pwd)
-RUN echo $(ls -aR)
-
 CMD [ "node", "/build/index.js" ]
