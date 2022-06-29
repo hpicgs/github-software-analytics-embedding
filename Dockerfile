@@ -2,9 +2,6 @@ FROM node:16
 
 RUN npm install -g pnpm
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
 COPY analytics/src ./src
 
 COPY analytics/package.json .
@@ -14,15 +11,12 @@ COPY analytics/tsconfig.json .
 ARG repository_path=./
 COPY $repository_path /repository
 
-ENV REPOSITORY_ROOT=/repository
+ENV REPOSITORY_PATH=/repository
 
 RUN pnpm install
-# If you are building your code for production
-# RUN npm ci --only=production
-
 RUN pnpm run build
-# Bundle app source
 
+RUN echo $(pwd)
 RUN echo $(ls -aR)
 
 CMD [ "node", "build/index.js" ]

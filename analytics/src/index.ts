@@ -6,9 +6,9 @@ import glob from "glob";
 const globPromise = promisify(glob);
 
 async function processFiles() {
-  if(!process.env.REPOSITORY_ROOT) throw new Error('REPOSITORY_ROOT environment variable is not set');
-  console.log("REPOSITORY_ROOT=", process.env.REPOSITORY_ROOT)
-  const files = await globPromise(`${process.env.REPOSITORY_ROOT}/**/*.ts`);
+  if(!process.env.REPOSITORY_PATH) throw new Error('REPOSITORY_PATH environment variable is not set');
+  console.log("REPOSITORY_PATH=", process.env.REPOSITORY_PATH)
+  const files = await globPromise(`${process.env.REPOSITORY_PATH}/**/*.ts`);
 
   console.log(files)
   

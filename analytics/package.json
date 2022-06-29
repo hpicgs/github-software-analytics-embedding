@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env REPOSITORY_ROOT=../testrepo ts-node src/index.ts",
+    "start": "cross-env REPOSITORY_PATH=../testrepo ts-node src/index.ts",
     "build": "tsc"
   },
   "repository": {
