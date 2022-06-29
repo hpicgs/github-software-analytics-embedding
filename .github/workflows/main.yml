@@ -16,4 +16,4 @@ jobs:
       - name: Run HiViSer 🚀
         uses: ./ # Uses the action in the root directory
         with:
-          repository_root: ./testrepo
+          repository_path: ./testrepo

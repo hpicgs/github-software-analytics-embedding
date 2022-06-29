@@ -1,5 +1,9 @@
 name: "HiViSer - Action"
 description: "HiViSer visualisations for your repository"
+branding:
+  icon: "search"
+  color: "blue"
+
 inputs:
   token:
     description: >

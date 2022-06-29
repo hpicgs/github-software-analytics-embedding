@@ -97,9 +97,6 @@ out
 .nuxt
 dist
 
-# Build folders
-analytics/build
-
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
