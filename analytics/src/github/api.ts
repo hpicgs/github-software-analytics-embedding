@@ -25,7 +25,7 @@ async function createTag(tag: string, message: string, object_sha: string) {
   console.log(`creating tag ${tag} - "${message}"`);
 
   const response = await octokit.request(
-    `POST /repos/${repo}/git/tags`,
+    `POST /repos/${owner}/${repo}/git/tags`,
     {
       owner,
       repo,
