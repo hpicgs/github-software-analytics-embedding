@@ -1,6 +1,6 @@
 FROM node:16
 
-RUN npm install -g pnpm
+RUN npm install pnpm --location=global
 
 ARG repository_path=./
 COPY $repository_path /repository
