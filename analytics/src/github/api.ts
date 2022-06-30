@@ -2,8 +2,6 @@ import { Octokit } from "octokit";
 import { createActionAuth } from "@octokit/auth-action"
 import "dotenv/config";
 
-if (!process.env.GITHUB_TOKEN)
-  throw new Error("GITHUB_TOKEN environment variable is not set");
 if (!process.env.GITHUB_REPOSITORY)
   throw new Error("GITHUB_REPOSITORY environment variable is not set");
 if (!process.env.GITHUB_REPOSITORY_OWNER)
@@ -18,9 +16,10 @@ if (process.env.GITHUB_ACTIONS) {
   console.log("Running in GitHub Actions, using @octokit/auth-action");
   octokit = new Octokit({ authStrategy: createActionAuth});
 } else {
+  if (!process.env.GITHUB_TOKEN)
+    throw new Error("GITHUB_TOKEN environment variable is not set. This needs to be set if you want to run this script outside of GitHub Actions");
   octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 }
-
 
 async function createTag(tag: string, message: string, object_sha: string) {
   console.log(`creating tag ${tag} - "${message}"`);
