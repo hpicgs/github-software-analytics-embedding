@@ -1,4 +1,5 @@
 import { Octokit } from "octokit";
+import { createActionAuth } from "@octokit/auth-action"
 import "dotenv/config";
 
 if (!process.env.GITHUB_TOKEN)
@@ -12,12 +13,19 @@ const repo = process.env.GITHUB_REPOSITORY;
 const owner = process.env.GITHUB_REPOSITORY_OWNER;
 const commit_sha = process.env.GITHUB_SHA || "default_tag";
 
-const auth_api = new Octokit({ auth: process.env.GITHUB_TOKEN });
+let octokit: Octokit;
+if (process.env.GITHUB_ACTIONS) {
+  console.log("Running in GitHub Actions, using @octokit/auth-action");
+  octokit = new Octokit({ authStrategy: createActionAuth});
+} else {
+  octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+}
+
 
 async function createTag(tag: string, message: string, object_sha: string) {
   console.log(`creating tag ${tag} - "${message}"`);
 
-  const response = await auth_api.request(
+  const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/tags`,
     {
       owner,
@@ -35,7 +43,7 @@ async function createTag(tag: string, message: string, object_sha: string) {
 async function createBlob(content: string) {
   console.log(`creating blob with content: ${content.substring(0, 10)} ...`);
 
-  const response = await auth_api.request(
+  const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/blobs`,
     {
       owner,
@@ -54,7 +62,7 @@ async function createTree(content: string): Promise<string> {
     ${content.substring(0, 10)}...`
   );
 
-  const response = await auth_api.request(
+  const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/trees`,
     {
       owner,
