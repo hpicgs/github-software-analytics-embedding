@@ -7,8 +7,8 @@ if (!process.env.GITHUB_REPOSITORY)
 if (!process.env.GITHUB_REPOSITORY_OWNER)
   throw new Error("GITHUB_REPOSITORY_OWNER environment variable is not set");
 
-const repo = process.env.GITHUB_REPOSITORY;
-const owner = process.env.GITHUB_REPOSITORY_OWNER;
+const repo_path = process.env.GITHUB_REPOSITORY;
+const [owner, repo] = repo_path.split('/');
 const commit_sha = process.env.GITHUB_SHA || "default_tag";
 
 let octokit: Octokit;
@@ -25,7 +25,7 @@ async function createTag(tag: string, message: string, object_sha: string) {
   console.log(`creating tag ${tag} - "${message}"`);
 
   const response = await octokit.request(
-    `POST /repos/${owner}/${repo}/git/tags`,
+    `POST /repos/${repo}/git/tags`,
     {
       owner,
       repo,
