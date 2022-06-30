@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/hpicgs/github-software-analytics-embedding#readme",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "esprima": "^4.0.1",
-    "glob": "^8.0.3"
+    "glob": "^8.0.3",
+    "octokit": "^1.8.1"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",

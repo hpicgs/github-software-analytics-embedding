@@ -2,16 +2,18 @@ import { parseScript, Program, tokenize } from "esprima";
 import { readFileSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import glob from "glob";
+import { saveMetrics } from "./github/api";
 
 const globPromise = promisify(glob);
 
 async function processFiles() {
-  if(!process.env.REPOSITORY_PATH) throw new Error('REPOSITORY_PATH environment variable is not set');
-  console.log("REPOSITORY_PATH=", process.env.REPOSITORY_PATH)
+  if (!process.env.REPOSITORY_PATH)
+    throw new Error("REPOSITORY_PATH environment variable is not set");
+  console.log("REPOSITORY_PATH=", process.env.REPOSITORY_PATH);
   const files = await globPromise(`${process.env.REPOSITORY_PATH}/**/*.ts`);
 
-  console.log(files)
-  
+  console.log(files);
+
   const csvData = [];
   for (const filename of files) {
     const file = readFileSync(filename, "utf-8");
@@ -29,6 +31,7 @@ async function processFiles() {
     csv += row.join(",") + "\r\n";
   }
   writeFileSync("metrics.csv", csv);
+  saveMetrics(csv);
 }
 
 processFiles().catch((e) => {
