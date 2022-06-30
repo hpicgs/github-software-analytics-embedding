@@ -4,8 +4,6 @@ import "dotenv/config";
 
 if (!process.env.GITHUB_REPOSITORY)
   throw new Error("GITHUB_REPOSITORY environment variable is not set");
-if (!process.env.GITHUB_REPOSITORY_OWNER)
-  throw new Error("GITHUB_REPOSITORY_OWNER environment variable is not set");
 
 const repo_path = process.env.GITHUB_REPOSITORY;
 const [owner, repo] = repo_path.split('/');
@@ -38,6 +36,24 @@ async function createTag(tag: string, message: string, object_sha: string) {
 
   console.log(response);
 }
+
+async function createRef(ref: string, sha: string) {
+  console.log(`creating ref ${ref} for metrics tree ${sha}`);
+
+  const response = await octokit.request(
+    `POST /repos/${owner}/${repo}/git/refs`,
+    {
+      owner,
+      repo,
+      ref,
+      sha
+    }
+  );
+
+  console.log(response);
+}
+
+
 
 async function createBlob(content: string) {
   console.log(`creating blob with content: ${content.substring(0, 10)} ...`);
@@ -85,6 +101,7 @@ export async function saveMetrics(metrics_csv: string) {
   //Todo: add the image to this call later
   const tree_sha = await createTree(metrics_csv);
   //Todo: create tag for this tree with commit hash
-  const message = `HiViser Metrics and Visualisationss for commit ${commit_sha}`;
-  await createTag(commit_sha, message, tree_sha);
+  //const message = `HiViser Metrics and Visualisationss for commit ${commit_sha}`;
+  await createRef(`refs/metrics/${commit_sha}`, tree_sha);
+  //await createTag(commit_sha, message, tree_sha);
 }
