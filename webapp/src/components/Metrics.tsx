@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import ReactDOMServer from "react-dom/server";
-import Papa from "papaparse";
+import MetricsTableData from "../types/MetricTable";
+import parseMetrics from "../utils/csv";
 import "./Metrics.css";
+import MetricsTable from "./MetricsTable";
 
 export default function Metrics() {
-  const [data, setData] = useState<Array<any>>([]);
+  const [data, setData] = useState<MetricsTableData>();
 
   useEffect(() => {
     async function getData() {
@@ -13,20 +14,18 @@ export default function Metrics() {
       const result = await reader?.read();
       const decoder = new TextDecoder("utf-8");
       const csv = decoder.decode(result?.value);
-      const results = Papa.parse(csv, { header: true });
-      const rows = results.data;
-      setData(rows);
+      const metricTableData = parseMetrics(csv)
+      console.log(metricTableData);
+      setData(metricTableData);
     }
     getData();
   }, []);
 
-  const htmlString = ReactDOMServer.renderToString(<DataTable data={data} />);
-  console.log(htmlString);
   return (
     <div>
       <h1>Metrics</h1>
       <h3>Calculated Metrics: </h3>
-      <DataTable data={data} />
+      <MetricsTable data={data} />
       <h3>Generated Treemap: </h3>
     </div>
   );

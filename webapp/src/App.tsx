@@ -1,4 +1,4 @@
-import Metrics from "./Metrics";
+import Metrics from "./components/Metrics";
 
 export default function App() {
   return <div className="App">
