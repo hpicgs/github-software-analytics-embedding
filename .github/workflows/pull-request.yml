@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Lint, Format & Build 🛠️
+    name: Build 🛠️
     runs-on: ubuntu-latest
 
     steps:

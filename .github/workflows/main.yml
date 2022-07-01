@@ -23,7 +23,7 @@ jobs:
           WITH_V: true
        
   deploy:
-    name: Deploy HiViSer Frontend to GitHub Pages
+    name: Deploy HiViSer Frontend to GitHub Pages 🚀
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
