@@ -1,22 +1,75 @@
-name: Generate HiViSer visualisations
+name: Deploy HiViSer GitHub Pages
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
 
 jobs:
-  test:
-    name: Run HiViSer Action
-    concurrency: 
-      group: ${{ github.ref }}
-      cancel-in-progress: true # Recommended if you intend to make multiple deployments in quick succession.
-    permissions: write-all
+  bump-version:
+    name: Bump package.json version ⬆
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: 'actions/checkout@v2'
+        with:
+          ref: ${{ github.ref }}
+      - name: Print old package.json 🖨
+        run: cat ./package.json
+      - name: Automated Version Bump ⬆
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix: 'v'
+          minor-wording: 'add,Adds,new'
+          major-wording: 'MAJOR,cut-major'
+          patch-wording: 'patch,fixes,fix'
+          rc-wording: 'RELEASE,alpha'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print new package.json 🖨
+        run: cat ./package.json
+      - name: Print new Tag 🏷
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+        run: echo "new tag $NEW_TAG"
+
+  deploy:
+    name: Deploy HiViSer GitHub Pages
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
-      # To use this repository's private action,
-      # we must check out the repository
+      # To use this repository's private action, we must check out the repository
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - name: Run HiViSer 🚀
-        uses: ./ # Uses the action in the root directory
+      - name: Setup pnpm ⚙️
+        uses: pnpm/action-setup@v2.2.2
         with:
-          repository_path: ./testrepo
+          version: 7
+
+      - name: Setup Node.js ⚙️
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          
+      - name: Install and Build 🔧
+        run: |
+          cd webapp
+          pnpm install
+          pnpm run build
+
+      - name: Deploy Webapp 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: webapp/dist # The folder the action should deploy.
+      
+      - name: Release HiViSer 🎉 
+        uses: tgymnich/publish-github-action@v1.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
