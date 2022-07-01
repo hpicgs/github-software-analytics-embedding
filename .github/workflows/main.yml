@@ -8,6 +8,7 @@ jobs:
     concurrency: 
       group: ${{ github.ref }}
       cancel-in-progress: true # Recommended if you intend to make multiple deployments in quick succession.
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       # To use this repository's private action,

@@ -1,9 +1,40 @@
 # github-software-analytics-embedding
 Seminar Project of the Seminar "Advanced Techniques for Analysis and Visualization of Software Data" of CGS, HPI and DEF in the Summer Term 2022
 
-## Installation
+# Usage
+⚠ This will not work until we made our first release
 
-Todo: Description of how to add the HiViSer action to a repository
+Create a new GitHub Actions workflow in your project, e.g. at .github/workflows/hiviser.yml. The content of the file should be in the following format:
+```yaml
+name: HiViSer
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
+  # Replace pull_request with pull_request_target if you
+  # plan to use this action with forks, see the Limitations section
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-hiviser:
+    name: Run HiViSer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Run linters
+        uses: hpicgs/hiviser-action@v0
+        # Optional, use if you want to analyse a specific folder
+        with:
+          repository_path: ./
+```
 
 ## Development
 
@@ -13,14 +44,28 @@ Install `pnpm`:
 npm i pnpm -g
 ```
 
-To setup the Dashboard for development run:
+### Setup Webapp Development
+To setup the Webapp for development run:
 
 ```
 cd webapp
 pnpm i
 pnpm run dev
 ```
+### Setup Code Anayltics Development locally
+Create an .env file
+```
+cd analytics
+cp .env.example .env
+```
+Make shure you fill in the GITHUB_TOKEN variable in the `.env` file
 
+To setup the node application for code analysis for development run:
+```
+cd analytics
+pnpm i
+pnpm start
+```
 
 ### Git blobs gh api
 
@@ -35,6 +80,10 @@ Get the blob
 gh api -H "Accept: application/vnd.github.v3+json" /repos/hpicgs/github-software-analytics-embedding/git/blobs/a7553cd0a3c0f65602eb761017063c01558b4b91
 ```
 
+#### Curl
+curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/hpicgs/github-software-analytics-embedding/git/blobs/a7553cd0a3c0f65602eb761017063c01558b4b91
+
+curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/hpicgs/github-software-analytics-embedding/git/blobs/a7553cd0a3c0f65602eb761017063c01558b4b91 | jq -r '.content' | base64 --decode
 
 ## Building and running the docker container locally
 ```

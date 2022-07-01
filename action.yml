@@ -23,4 +23,3 @@ runs:
   image: "Dockerfile"
   env:
     REPOSITORY_PATH: ${{ inputs.repository_path }}
-    GITHUB_TOKEN: ${{ inputs.token }}"
