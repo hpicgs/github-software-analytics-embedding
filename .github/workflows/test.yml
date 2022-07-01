@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test:
-    name: Run HiViSer Action
+    name: Run HiViSer Action 🧪
     concurrency: 
       group: ${{ github.ref }}
       cancel-in-progress: true # Recommended if you intend to make multiple deployments in quick succession.
