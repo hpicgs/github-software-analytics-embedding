@@ -13,7 +13,8 @@ export default function Metrics() {
 
   useEffect(() => {
     async function fetchData() {
-      const csv = await getMetrics('hpicgs', 'github-software-analytics-embedding', '5b337b8409f2a2d3b1b14f85d52a97a0258fe256')
+      if(!owner || !repo || !commit_SHA) return;
+      const csv = await getMetrics(owner, repo, commit_SHA);
       const parsedData = parseMetrics(csv);
       console.log(parsedData);
       setData(parsedData);
@@ -30,37 +31,3 @@ export default function Metrics() {
     </div>
   );
 }
-
-const DataTable = ({ data }: any) => {
-  const keys = [...new Set(data.map((row: Object) => Object.keys(row)).flat())];
-  return (
-    <div>
-      <table border={1}>
-        <TableHeader keys={keys} />
-        {data.map((row: object) => (
-          <TableRow row={row} />
-        ))}
-      </table>
-    </div>
-  );
-};
-const TableRow = ({ row }: any) => {
-  const rowKeys = Object.keys(row);
-  return (
-    <tr>
-      {rowKeys.map((key: string) => {
-        return <td key={key}>{row[key]}</td>;
-      })}
-    </tr>
-  );
-};
-
-const TableHeader = ({ keys }: any) => {
-  return (
-    <tr>
-      {keys.map((key: string) => (
-        <th>{key}</th>
-      ))}
-    </tr>
-  );
-};

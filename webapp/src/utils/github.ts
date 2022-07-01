@@ -35,5 +35,3 @@ export async function getMetrics(owner: string, repo: string, commit_sha: string
     console.log(metrics_csv)
     return metrics_csv
 }
-
-getMetrics('hpicgs', 'github-software-analytics-embedding', '5b337b8409f2a2d3b1b14f85d52a97a0258fe256')
