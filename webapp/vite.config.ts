@@ -11,6 +11,11 @@ export default defineConfig(({ command, mode }) => {
       tsconfigPaths(),
       legacy()
     ],
+    resolve: {
+      alias: {
+        'node-fetch': 'isomorphic-fetch',
+      },
+    },
     build: {
       rollupOptions: {
         output: {

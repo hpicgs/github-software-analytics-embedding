@@ -6,10 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import MetricsTableData from '../types/MetricTable';
+import { MetricsTableData } from '../types/FileMetrics';
 
 
-export default function MatricsTable({ header, rows }: MetricsTableData) {
+export default function MetricsTable({header, rows}: MetricsTableData) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a metrics table">
@@ -23,11 +23,13 @@ export default function MatricsTable({ header, rows }: MetricsTableData) {
         <TableBody>
           {rows.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-            {row.map((cell) => (
-                <TableCell component="th" scope="row">{cell}</TableCell>
+            {header.map((key) => (
+              <TableCell component="th" scope="row">
+                {row[key]}
+              </TableCell>
             ))}
             </TableRow>
           ))}

@@ -1,31 +1,31 @@
 import { useState, useEffect } from "react";
-import MetricsTableData from "../types/MetricTable";
 import parseMetrics from "../utils/csv";
-import "./Metrics.css";
 import MetricsTable from "./MetricsTable";
+import { useParams } from 'react-router-dom';
+import { getMetrics } from "@/utils/github";
+import {MetricsTableData} from "../types/FileMetrics";
 
 export default function Metrics() {
+  let { owner, repo, commit_SHA } = useParams();
+  
   const [data, setData] = useState<MetricsTableData>();
 
+
   useEffect(() => {
-    async function getData() {
-      const response = await fetch("./metrics.csv");
-      const reader = response.body?.getReader();
-      const result = await reader?.read();
-      const decoder = new TextDecoder("utf-8");
-      const csv = decoder.decode(result?.value);
-      const metricTableData = parseMetrics(csv)
-      console.log(metricTableData);
-      setData(metricTableData);
+    async function fetchData() {
+      const csv = await getMetrics('hpicgs', 'github-software-analytics-embedding', '5b337b8409f2a2d3b1b14f85d52a97a0258fe256')
+      const parsedData = parseMetrics(csv);
+      console.log(parsedData);
+      setData(parsedData);
     }
-    getData();
+    fetchData();
   }, []);
 
   return (
     <div>
       <h1>Metrics</h1>
       <h3>Calculated Metrics: </h3>
-      <MetricsTable data={data} />
+      {data ? <MetricsTable {...data} /> : <p>Loading...</p>}
       <h3>Generated Treemap: </h3>
     </div>
   );
