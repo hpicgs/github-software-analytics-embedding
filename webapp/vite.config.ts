@@ -11,6 +11,11 @@ export default defineConfig(({ command, mode }) => {
       tsconfigPaths(),
       legacy()
     ],
+    resolve: {
+      alias: {
+        'node-fetch': 'isomorphic-fetch',  // This is a workarround for https://github.com/octokit/octokit.js/issues/2126
+      },
+    },
     build: {
       rollupOptions: {
         output: {

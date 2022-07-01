@@ -3,18 +3,26 @@
   "version": "0.0.1",
   "private": "true",
   "scripts": {
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build",
     "dev": "vite",
     "preinstall": "npx only-allow pnpm",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/papaparse": "^5.3.2",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/material": "^5.8.6",
+    "buffer": "^6.0.3",
+    "isomorphic-fetch": "^3.0.0",
+    "octokit": "^1.8.1",
     "papaparse": "^5.3.2",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-router-dom": "6"
   },
   "devDependencies": {
+    "@octokit/types": "^6.38.1",
+    "@types/papaparse": "^5.3.2",
     "@types/react": "18.0.12",
     "@types/react-dom": "18.0.5",
     "@typescript-eslint/eslint-plugin": "5.27.1",

@@ -52,6 +52,8 @@ cd webapp
 pnpm i
 pnpm run dev
 ```
+
+Navigate to e.g. `localhost:3000/hpicgs/github-software-analytics-embedding/5b337b8409f2a2d3b1b14f85d52a97a0258fe256`
 ### Setup Code Anayltics Development locally
 Create an .env file
 ```
