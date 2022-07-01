@@ -1,8 +1,6 @@
 {
   "name": "github-software-analytics-embedding",
   "description": "Seminar Project of the Seminar \"Advanced Techniques for Analysis and Visualization of Software Data\" of CGS, HPI and DEF in the Summer Term 2022",
-  "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "start": "cross-env REPOSITORY_PATH=../testrepo ts-node src/index.ts",
     "build": "tsc"
@@ -11,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/hpicgs/github-software-analytics-embedding.git"
   },
-  "author": "",
+  "author": "Jasper Blum, Franziska Lauterbach",
   "bugs": {
     "url": "https://github.com/hpicgs/github-software-analytics-embedding/issues"
   },

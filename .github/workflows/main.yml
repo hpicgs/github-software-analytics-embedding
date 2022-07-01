@@ -15,53 +15,15 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: 'actions/checkout@v2'
-        with:
-          ref: ${{ github.ref }}
-      # Version Bump WebApp
-      - name: Print old webapp/package.json 🖨
-        run: cat ./package.json
-      - name: Automated Version Bump for Webapp ⬆
-        id: version-bump-webapp
-        uses: 'phips28/gh-action-bump-version@master'
-        with:
-          tag-prefix: 'v'
-          minor-wording: 'add,Adds,new'
-          major-wording: 'MAJOR,cut-major'
-          patch-wording: 'patch,fixes,fix'
-          rc-wording: 'RELEASE,alpha'
-          skip-tag:  'true'
-          skip-push:  'true'
+        uses: 'actions/checkout@v3'
+      - name: Bump version and push tag 🏷
+        uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR:  'webapp'
-      - name: Print new webapp/package.json 🖨
-        run: cat ./package.json
-      # Version Bump Action
-      - name: Print old analytics/package.json 🖨
-        run: cat ./package.json
-      - name: Automated Version Bump for Webapp ⬆
-        id: version-bump-action
-        uses: 'phips28/gh-action-bump-version@master'
-        with:
-          tag-prefix: 'v'
-          minor-wording: 'add,Adds,new'
-          major-wording: 'MAJOR,cut-major'
-          patch-wording: 'patch,fixes,fix'
-          rc-wording: 'RELEASE,alpha'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR:  'analytics'
-      - name: Print new analytics/package.json 🖨
-        run: cat ./package.json
-
-      - name: Print new Tag 🏷
-        env:
-          NEW_TAG: ${{ steps.version-bump-action.outputs.newTag }}
-        run: echo "new tag $NEW_TAG"
-
+          WITH_V: true
+       
   deploy:
-    name: Deploy HiViSer GitHub Pages
+    name: Deploy HiViSer Frontend to GitHub Pages
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
@@ -81,15 +43,15 @@ jobs:
           
       - name: Install and Build 🔧
         run: |
-          cd webapp
+          cd frontend
           pnpm install
           pnpm run build
 
-      - name: Deploy Webapp 🚀
+      - name: Deploy Frontend 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: webapp/dist # The folder the action should deploy.
+          folder: frontend/dist # The folder the action should deploy.
       
       - name: Release HiViSer 🎉 
         uses: tgymnich/publish-github-action@v1.2
