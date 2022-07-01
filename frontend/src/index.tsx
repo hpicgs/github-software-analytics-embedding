@@ -11,7 +11,7 @@ const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/github-software-analytics-embedding">
       <App />
     </BrowserRouter>
   </StrictMode>
