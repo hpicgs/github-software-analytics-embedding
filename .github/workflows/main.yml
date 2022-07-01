@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   bump-version:
-    name: Bump package.json version ⬆
+    name: Bump tag version ⬆
     runs-on: ubuntu-latest
 
     steps:
