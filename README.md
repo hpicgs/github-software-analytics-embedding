@@ -1,9 +1,40 @@
 # github-software-analytics-embedding
 Seminar Project of the Seminar "Advanced Techniques for Analysis and Visualization of Software Data" of CGS, HPI and DEF in the Summer Term 2022
 
-## Installation
+# Usage
+⚠ This will not work until we made our first release
 
-Todo: Description of how to add the HiViSer action to a repository
+Create a new GitHub Actions workflow in your project, e.g. at .github/workflows/hiviser.yml. The content of the file should be in the following format:
+```yaml
+name: HiViSer
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
+  # Replace pull_request with pull_request_target if you
+  # plan to use this action with forks, see the Limitations section
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-hiviser:
+    name: Run HiViSer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Run linters
+        uses: hpicgs/hiviser-action@v0
+        # Optional, use if you want to analyse a specific folder
+        with:
+          repository_path: ./
+```
 
 ## Development
 
