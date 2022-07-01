@@ -1,5 +1,5 @@
 export interface FileMetrics {
-    [key: string]: Object;
+    [key: string]: any;
 }
 
 export interface MetricsTableData {
