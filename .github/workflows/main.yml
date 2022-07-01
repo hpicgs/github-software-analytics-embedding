@@ -18,10 +18,30 @@ jobs:
         uses: 'actions/checkout@v2'
         with:
           ref: ${{ github.ref }}
-      - name: Print old package.json 🖨
+      # Version Bump WebApp
+      - name: Print old webapp/package.json 🖨
         run: cat ./package.json
-      - name: Automated Version Bump ⬆
-        id: version-bump
+      - name: Automated Version Bump for Webapp ⬆
+        id: version-bump-webapp
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix: 'v'
+          minor-wording: 'add,Adds,new'
+          major-wording: 'MAJOR,cut-major'
+          patch-wording: 'patch,fixes,fix'
+          rc-wording: 'RELEASE,alpha'
+          skip-tag:  'true'
+          skip-push:  'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR:  'webapp'
+      - name: Print new webapp/package.json 🖨
+        run: cat ./package.json
+      # Version Bump Action
+      - name: Print old analytics/package.json 🖨
+        run: cat ./package.json
+      - name: Automated Version Bump for Webapp ⬆
+        id: version-bump-action
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: 'v'
@@ -31,11 +51,13 @@ jobs:
           rc-wording: 'RELEASE,alpha'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Print new package.json 🖨
+          PACKAGEJSON_DIR:  'analytics'
+      - name: Print new analytics/package.json 🖨
         run: cat ./package.json
+
       - name: Print new Tag 🏷
         env:
-          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+          NEW_TAG: ${{ steps.version-bump-action.outputs.newTag }}
         run: echo "new tag $NEW_TAG"
 
   deploy:
