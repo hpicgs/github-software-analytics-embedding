@@ -100,8 +100,5 @@ async function createTree(content: string): Promise<string> {
 export async function saveMetrics(metrics_csv: string) {
   //Todo: add the image to this call later
   const tree_sha = await createTree(metrics_csv);
-  //Todo: create tag for this tree with commit hash
-  //const message = `HiViser Metrics and Visualisationss for commit ${commit_sha}`;
   await createRef(`refs/metrics/${commit_sha}`, tree_sha);
-  //await createTag(commit_sha, message, tree_sha);
 }
