@@ -44,11 +44,11 @@ Install `pnpm`:
 npm i pnpm -g
 ```
 
-### Setup Webapp Development
-To setup the Webapp for development run:
+### Setup Frontend Development
+To setup the Frontend for development run:
 
 ```
-cd webapp
+cd frontend
 pnpm i
 pnpm run dev
 ```

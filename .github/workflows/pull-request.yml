@@ -1,0 +1,34 @@
+name: On Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    name: Build 🛠️
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Install pnpm ⚙
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+
+      - name: Install Node 🟢
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install and Build 🔧
+        run: |
+          cd frontend
+          pnpm install
+          pnpm run build

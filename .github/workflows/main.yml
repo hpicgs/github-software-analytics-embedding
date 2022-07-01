@@ -15,31 +15,15 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: 'actions/checkout@v2'
-        with:
-          ref: ${{ github.ref }}
-      - name: Print old package.json 🖨
-        run: cat ./package.json
-      - name: Automated Version Bump ⬆
-        id: version-bump
-        uses: 'phips28/gh-action-bump-version@master'
-        with:
-          tag-prefix: 'v'
-          minor-wording: 'add,Adds,new'
-          major-wording: 'MAJOR,cut-major'
-          patch-wording: 'patch,fixes,fix'
-          rc-wording: 'RELEASE,alpha'
+        uses: 'actions/checkout@v3'
+      - name: Bump version and push tag 🏷
+        uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Print new package.json 🖨
-        run: cat ./package.json
-      - name: Print new Tag 🏷
-        env:
-          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
-        run: echo "new tag $NEW_TAG"
-
+          WITH_V: true
+       
   deploy:
-    name: Deploy HiViSer GitHub Pages
+    name: Deploy HiViSer Frontend to GitHub Pages 🚀
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
@@ -52,24 +36,21 @@ jobs:
         with:
           version: 7
 
-      - name: Setup Node.js ⚙️
+      - name: Install Node 🟢
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
       - name: Install and Build 🔧
         run: |
-          cd webapp
+          cd frontend
           pnpm install
           pnpm run build
 
-      - name: Deploy Webapp 🚀
+      - name: Deploy Frontend 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: webapp/dist # The folder the action should deploy.
-      
-      - name: Release HiViSer 🎉 
-        uses: tgymnich/publish-github-action@v1.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          folder: frontend/dist # The folder the action should deploy.
