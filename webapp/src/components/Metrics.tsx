@@ -6,15 +6,15 @@ import { getMetrics } from "@/utils/github";
 import {MetricsTableData} from "../types/FileMetrics";
 
 export default function Metrics() {
-  let { owner, repo, commit_SHA } = useParams();
+  let { owner, repo, commitSHA } = useParams();
   
   const [data, setData] = useState<MetricsTableData>();
 
 
   useEffect(() => {
     async function fetchData() {
-      if(!owner || !repo || !commit_SHA) return;
-      const csv = await getMetrics(owner, repo, commit_SHA);
+      if(!owner || !repo || !commitSHA) return;
+      const csv = await getMetrics(owner, repo, commitSHA);
       const parsedData = parseMetrics(csv);
       console.log(parsedData);
       setData(parsedData);
