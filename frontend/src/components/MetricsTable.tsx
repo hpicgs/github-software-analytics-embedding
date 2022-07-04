@@ -16,18 +16,18 @@ export default function MetricsTable({header, rows}: MetricsTableData) {
         <TableHead>
           <TableRow>
           {header.map((key) => (
-            <TableCell>{key}</TableCell>
+            <TableCell key={key}>{key}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow
-              key={row.id}
+              key={row.filename}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
             {header.map((key) => (
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" key={key + row.filename}>
                 {row[key]}
               </TableCell>
             ))}
