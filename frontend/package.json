@@ -2,8 +2,10 @@
   "name": "HiViSer-Dashboard",
   "version": "0.0.1",
   "private": "true",
+  "homepage": "https://hpicgs.github.io/github-software-analytics-embedding/",
   "scripts": {
     "build": "tsc --noEmit && vite build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "preinstall": "npx only-allow pnpm",
     "preview": "vite preview"
@@ -33,6 +35,7 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.30.0",
+    "gh-pages": "^4.0.0",
     "prettier": "2.6.2",
     "prettier-plugin-packagejson": "2.2.18",
     "prettier-plugin-tailwindcss": "0.1.11",
