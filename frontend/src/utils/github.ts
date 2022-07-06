@@ -1,6 +1,6 @@
 import { Octokit } from "octokit";
 import { Buffer } from "buffer";
-import { Endpoints } from "@octokit/types";
+import { Endpoints, GetResponseTypeFromEndpointMethod } from "@octokit/types";
 const octokit = new Octokit();
 
 export async function getMetrics(
@@ -45,17 +45,33 @@ export async function getMetrics(
   return metrics_csv;
 }
 
-export type RefsResponse =
+export type ListRefsResponseType =
   Endpoints["GET /repos/{owner}/{repo}/git/matching-refs/{ref}"]["response"];
 
 export async function getMetricCommits(
   owner: string,
   repo: string
-): Promise<RefsResponse> {
+): Promise<ListRefsResponseType> {
   const response = await octokit.rest.git.listMatchingRefs({
     owner,
     repo,
     ref: "metrics",
   });
+  return response;
+}
+
+export type ListBranchesResponseType = GetResponseTypeFromEndpointMethod<
+  typeof octokit.rest.repos.listBranches
+>;
+
+export async function getBranches(
+  owner: string,
+  repo: string
+): Promise<ListBranchesResponseType> {
+  const response = await octokit.rest.repos.listBranches({
+    owner,
+    repo,
+  });
+
   return response;
 }
