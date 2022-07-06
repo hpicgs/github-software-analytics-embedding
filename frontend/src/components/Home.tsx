@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { Button, Divider, List, ListItem, ListItemText} from '@mui/material'
+import { useNavigate, Link } from 'react-router-dom'
 import { getMetricCommits, RefsResponse } from '@/utils/github'
-import { Endpoints } from '@octokit/types'
 
 export default function Home() {
   const navigate = useNavigate();
-  const [data, setData] = useState<RefsResponse>();
+  const owner = 'hpicgs'
+  const repo = 'github-software-analytics-embedding'
+  const [refs, setRefs] = useState<RefsResponse>();
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getMetricCommits('hpicgs', 'github-software-analytics-embedding')
-      setData(data)
+      const refs = await getMetricCommits(owner, repo)
+      console.log(refs)
+      setRefs(refs)
     }
     fetchData()
   }, [])
 
   return (
-    <div>
-        <Button variant="outlined"
-            onClick={() => {
-            navigate("/hpicgs/github-software-analytics-embedding/b45d39c7b9d3bed22a383a658c1c941a111d5223")
-        }}>
-          Show example commit metrics
-        </Button>
-    </div>
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      {refs && refs.data.map((ref) => (
+        <ListItem button component={Link} to={`/${owner}/${repo}/${ref.ref.split('/').pop()}`} key={ref.ref}>
+          <ListItemText primary={ref.ref} secondary={ref.object.sha} />
+        </ListItem>
+      ))}
+    </List>
   )
 }

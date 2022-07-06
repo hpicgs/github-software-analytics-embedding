@@ -57,6 +57,5 @@ export async function getMetricCommits(
     repo,
     ref: "metrics",
   });
-  console.log(response);
   return response;
 }
