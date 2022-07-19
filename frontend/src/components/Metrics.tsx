@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import parseMetrics from "../utils/csv";
 import MetricsTable from "./MetricsTable";
 import { useParams } from 'react-router-dom';
-import { getMetrics } from "@/utils/github";
+import { getCommitSHA, getMetrics } from "@/utils/github";
 import {MetricsTableData} from "../types/FileMetrics";
 import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
 
 export default function Metrics() {
-  let { owner, repo, commitSHA } = useParams();
+  let { owner, repo, commitSHA, branch } = useParams();
   
   const [data, setData] = useState<MetricsTableData>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -27,7 +27,11 @@ export default function Metrics() {
 
   useEffect(() => {
     async function fetchData() {
-      if (!owner || !repo || !commitSHA) return;
+      if (!owner || !repo) return;
+      if (!commitSHA) {
+        if (!branch) return;
+        commitSHA = await getCommitSHA(owner, repo, branch);
+      } 
       try {
         const csv = await getMetrics(owner, repo, commitSHA);
         const parsedData = parseMetrics(csv);

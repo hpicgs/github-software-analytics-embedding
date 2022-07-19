@@ -3,6 +3,20 @@ import { Buffer } from "buffer";
 import { Endpoints, GetResponseTypeFromEndpointMethod } from "@octokit/types";
 const octokit = new Octokit();
 
+export async function getCommitSHA(
+  owner: string,
+  repo: string,
+  branch: string): Promise<string> {
+  
+  const ref = await octokit.rest.git.getRef({
+    owner,
+    repo,
+    ref: `heads/${branch}`,
+  });
+
+  return ref.data.object.sha;
+}
+
 export async function getMetrics(
   owner: string,
   repo: string,

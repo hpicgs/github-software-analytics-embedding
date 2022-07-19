@@ -12,6 +12,7 @@ export default function App() {
       <Container maxWidth="xl">
       <Routes>
         <Route path="/:owner/:repo/:commitSHA" element={<Metrics />} />
+        <Route path="/:owner/:repo/branches/:branch" element={<Metrics />} />
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
