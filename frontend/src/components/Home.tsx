@@ -40,7 +40,7 @@ export default function Home() {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  <Link component={RouterLink} to={`/${owner}/${repo}/${branch.commit.sha}`}>{branch.name}</Link>
+                  <Link component={RouterLink} to={`/${owner}/${repo}/branches/${branch.name}`}>{branch.name}</Link>
                 </TableCell>
               </TableRow>
             ))}
@@ -61,7 +61,7 @@ export default function Home() {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  <Link underline="hover" to={`/${owner}/${repo}/${ref.ref.split('/').pop()}`}>{ref.ref}</Link>
+                  <Link underline="hover" component={RouterLink} to={`/${owner}/${repo}/${ref.ref.split('/').pop()}`}>{ref.ref}</Link>
                 </TableCell>
               </TableRow>
             ))}

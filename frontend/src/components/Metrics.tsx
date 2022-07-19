@@ -21,7 +21,7 @@ export default function Metrics() {
       {repo}
     </Typography>,
     <Typography key="3" color="text.primary">
-      {commitSHA}
+      {branch ? branch : commitSHA}
     </Typography>
   ]
 
