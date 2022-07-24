@@ -26,9 +26,9 @@ async function processFiles() {
     const functionNumber = getNumberOfFunctions(ast);
     csvData.push([filename, loc, noc, cloc, dc, functionNumber]);
   }
-  let csv = "filename,LoC,NoC,CLoC, DC, Number of Functions\r\n";
+  let csv = "filename;LoC;NoC;CLoC;DC;Number_of_Functions\r\n";
   for (const row of csvData) {
-    csv += row.join(",") + "\r\n";
+    csv += row.join(";") + "\r\n";
   }
   writeFileSync("metrics.csv", csv);
   saveMetrics(csv);
