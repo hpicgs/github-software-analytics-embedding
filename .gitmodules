@@ -1,0 +1,6 @@
+[submodule "treemaps"]
+	path = frontend/treemaps
+	url = git@gitlab.hpi3d.de:seerene/treemaps.git
+[submodule "frontend/treemaps"]
+	path = frontend/treemaps
+	url = git@gitlab.hpi3d.de:seerene/treemaps.git
