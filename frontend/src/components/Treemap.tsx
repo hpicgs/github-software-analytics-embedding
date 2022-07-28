@@ -6,7 +6,7 @@ import {
   Visualization,
 } from "treemaps";
   
-export default function HiViSerClient() {
+export default function Treemap() {
 
   const [config, setConfig] = useState<Configuration>(new Configuration());
   const [visualization, setVisualization] = useState<Visualization>(new Visualization());
@@ -15,9 +15,9 @@ export default function HiViSerClient() {
 
 
   useEffect(() => {
-    setCanvas(initialize(canvasElement));
-
+    setCanvas(initialize("canvasElement"));
     loadConfig();
+    debugInit();
   }, []);
 
 
@@ -29,11 +29,26 @@ export default function HiViSerClient() {
     }
   }
 
+  function debugInit() {
+    // TODO: input(s) for debug logging / exposing global variables?
+
+    // Enable debug logging
+    // this.visualization.debug = true;
+
+    (window as any)['gloperate'] = gloperate;
+    (window as any)['canvas'] = canvas;
+    (window as any)['context'] = canvas?.context;
+    (window as any)['controller'] = canvas?.controller;
+    (window as any)['visualization'] = visualization;
+    (window as any)['renderer'] = visualization.renderer;
+  }
+
+
 
   return (
     <div>
-        <h1>HiviserClient</h1>
-        <div ref={canvasElement} className="label-overlay"></div>
+        <h1>Treemap</h1>
+        <div id="labelContainer" className="label-overlay"></div>
         <canvas id="canvasElement"></canvas>
     </div>
   );

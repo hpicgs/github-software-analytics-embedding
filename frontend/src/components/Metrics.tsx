@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getCommitSHA, getMetrics } from "@/utils/github";
 import {MetricsTableData} from "../types/FileMetrics";
 import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
-import HiViSerClient from "./HiviserClient";
+import Treemap from "./Treemap";
 
 export default function Metrics() {
   let { owner, repo, commitSHA, branch } = useParams();
@@ -60,7 +60,7 @@ export default function Metrics() {
         {error && <p>No metrics data found.</p>}
         {loading && <p>Loading...</p>}
         {data && <MetricsTable {...data} />}
-        <HiViSerClient />
+        <Treemap />
       </Stack>
     </div>
   );
