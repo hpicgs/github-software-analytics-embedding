@@ -16,6 +16,7 @@ export default function Treemap() {
 
   useEffect(() => {
     setCanvas(initialize("canvasElement"));
+    console.log("Config:", config)
     loadConfig();
     debugInit();
   }, []);
@@ -33,7 +34,7 @@ export default function Treemap() {
     // TODO: input(s) for debug logging / exposing global variables?
 
     // Enable debug logging
-    // this.visualization.debug = true;
+    visualization.debug = true;
 
     (window as any)['gloperate'] = gloperate;
     (window as any)['canvas'] = canvas;
