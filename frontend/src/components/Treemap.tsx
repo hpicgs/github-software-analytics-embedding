@@ -4,22 +4,23 @@ import {
   initialize,
   Configuration,
   Visualization,
+  Renderer,
 } from "treemaps";
   
 export default function Treemap() {
 
   const [config, setConfig] = useState<Configuration>(new Configuration());
   const [visualization, setVisualization] = useState<Visualization>(new Visualization());
-  const [canvas, setCanvas] = useState<gloperate.Canvas>();
+  //const [canvas, setCanvas] = useState<gloperate.Canvas | undefined>(undefined);
 
-
+  let canvas: gloperate.Canvas | undefined = undefined;
   useEffect(() => {
-    setCanvas(initialize("canvasElement"));
-    console.log("Config:", config)
-
+    canvas = initialize("canvasElement");
+    canvas.renderer = visualization.renderer as Renderer;
+    //setCanvas(initialize("canvasElement"));
     createConfig();
     loadConfig();
-    debugInit();
+    //debugInit();
   }, []);
 
 
@@ -111,10 +112,15 @@ export default function Treemap() {
   }
 
   function loadConfig() {
-    if (config && visualization && canvas) {
+    //if (config && visualization && canvas) {
       visualization.configuration = config;
+      console.log("Visualization:", visualization);
+      console.log("Config:", visualization.configuration);
+      console.log("Canvas:", canvas);
+
+      
       canvas.controller.update();
-    }
+    //}
   }
 
   function debugInit() {
@@ -135,7 +141,7 @@ export default function Treemap() {
     <div>
         <h1>Treemap</h1>
         <div id="labelContainer" className="label-overlay"></div>
-        <canvas id="canvasElement"></canvas>
+        <canvas id="canvasElement" width="300" height="150"></canvas>
     </div>
   );
 }
