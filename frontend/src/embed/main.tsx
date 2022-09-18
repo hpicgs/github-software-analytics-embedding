@@ -6,8 +6,15 @@ function init() {
   document.currentScript?.parentElement?.append(container);
   const root = createRoot(container);
 
-  root.render(<Embed />);
+  const owner = document.currentScript?.getAttribute("owner") ?? undefined;
+  const repo = document.currentScript?.getAttribute("repo") ?? undefined;
+  const branch = document.currentScript?.getAttribute("branch") ?? undefined;
+  const commitSHA =
+    document.currentScript?.getAttribute("commitSHA") ?? undefined;
+
+  root.render(
+    <Embed owner={owner} repo={repo} branch={branch} commitSHA={commitSHA} />
+  );
 }
 
 init();
-console.log("moin");
