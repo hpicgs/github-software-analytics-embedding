@@ -23,7 +23,7 @@
       "@analytics/*": ["../analytics/src/*"]
     }
   },
-  "include": ["src", "../analytics/types"],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],
   "ts-node": {
     // It is faster to skip typechecking.

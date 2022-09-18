@@ -13,13 +13,11 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     optimizeDeps: {
-      include: [
-        "treemaps"
-      ]
+      include: ["treemaps"],
     },
     build: {
       rollupOptions: {
-        external: ['react'],
+        external: ["react", "treemaps"],
       },
     },
   };
