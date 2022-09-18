@@ -1,6 +1,6 @@
 {
-  "name": "HiViSer-Dashboard",
-  "version": "0.0.1",
+  "name": "treemap-github-embedding",
+  "version": "0.1.0",
   "private": "true",
   "homepage": "https://hpicgs.github.io/github-software-analytics-embedding/",
   "scripts": {

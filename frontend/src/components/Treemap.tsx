@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import {
   gloperate,
   initialize,
-  Configuration,
   Visualization,
   Renderer,
+  Configuration
 } from "treemaps";
   
 export default function Treemap() {
