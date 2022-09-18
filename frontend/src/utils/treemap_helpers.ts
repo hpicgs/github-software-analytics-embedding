@@ -1,4 +1,4 @@
-import { MetricsNode } from "../../../analytics/src/types";
+import { MetricsNode } from "@analytics/types";
 import { Configuration } from "treemaps";
 
 export function configFromMetricsJSON(json: string): Configuration {

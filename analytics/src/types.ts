@@ -1,8 +1,8 @@
-interface FileMetrics {
+export interface FileMetrics {
   [key: string]: any;
 }
 
-interface MetricsTableData {
+export interface MetricsTableData {
   header: string[];
   rows: FileMetrics[];
 }
@@ -12,27 +12,18 @@ enum NodeType {
   DIRECTORY = "directory",
 }
 
-interface MetricsNode {
+export interface MetricsNode {
   path: string;
   name: string;
   type: NodeType;
 }
 
-interface DirectoryNode extends MetricsNode {
+export interface DirectoryNode extends MetricsNode {
   type: NodeType.DIRECTORY;
   children: Array<MetricsNode | null>;
 }
 
-interface FileNode extends MetricsNode {
+export interface FileNode extends MetricsNode {
   type: NodeType.FILE;
   metrics: Object;
 }
-
-export {
-  FileMetrics,
-  MetricsTableData,
-  NodeType,
-  MetricsNode,
-  DirectoryNode,
-  FileNode,
-};

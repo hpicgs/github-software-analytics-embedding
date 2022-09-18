@@ -1,4 +1,3 @@
-import { configFromMetrics } from "@/utils/treemap_helpers";
 import { useEffect, useState } from "react";
 import {
   gloperate,
@@ -19,8 +18,8 @@ export default function Treemap() {
     canvas = initialize("canvasElement");
     canvas.renderer = visualization.renderer as Renderer;
     //setCanvas(initialize("canvasElement"));
-    //createConfig();
-    configFromMetrics();
+    createConfig();
+    //configFromMetricsJSON();
 
     loadConfig();
     //debugInit();
@@ -111,7 +110,7 @@ export default function Treemap() {
     visualization.configuration = config;
 
     visualization.skipLeafLabeling = true;
-    visualization.renderer.skipLeafLabelPass = true;
+    //visualization.renderer.skipLeafLabelPass = true;
   }
 
   function loadConfig() {
@@ -122,7 +121,7 @@ export default function Treemap() {
       console.log("Canvas:", canvas);
 
       
-      canvas.controller.update();
+      canvas!.controller.update();
     //}
   }
 

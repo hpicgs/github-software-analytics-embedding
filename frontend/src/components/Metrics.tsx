@@ -3,7 +3,7 @@ import { parseMetrics } from "../utils/csv";
 import MetricsTable from "./MetricsTable";
 import { useParams } from 'react-router-dom';
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
-import { MetricsTableData } from "../../../analytics/src/types";
+import { MetricsTableData } from "@analytics/types";
 import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
 import Treemap from "./Treemap";
 import { configFromMetricsJSON } from "@/utils/treemap_helpers";

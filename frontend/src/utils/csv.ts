@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import { FileMetrics, MetricsTableData } from "../../../analytics/src/types";
+import { FileMetrics, MetricsTableData } from "@analytics/types";
 
 export function parseMetrics(csv: string): MetricsTableData {
   const parsed = Papa.parse<FileMetrics>(csv, {
