@@ -6,8 +6,8 @@ const octokit = new Octokit();
 export async function getCommitSHA(
   owner: string,
   repo: string,
-  branch: string): Promise<string> {
-  
+  branch: string
+): Promise<string> {
   const ref = await octokit.rest.git.getRef({
     owner,
     repo,
@@ -17,11 +17,12 @@ export async function getCommitSHA(
   return ref.data.object.sha;
 }
 
-export async function getMetrics(
+export async function getMetricsBlob(
   owner: string,
   repo: string,
-  commit_sha: string
-): Promise<string> {
+  commit_sha: string,
+  files: string[] = ["metrics.csv", "metrics.json"]
+): Promise<string[]> {
   const ref = await octokit.rest.git.getRef({
     owner,
     repo,
@@ -39,24 +40,23 @@ export async function getMetrics(
     console.log(object.path);
   });
 
-  const metrics_sha = response.data.tree.find(
-    (object) => object.path === "metrics.csv"
-  )?.sha;
+  return await Promise.all(
+    files.map(async (file) => {
+      const file_sha = response.data.tree.find(
+        (object) => object.path == file
+      )!.sha;
+      if (!file_sha) throw new Error(`${file} not found in tree object`);
 
-  if (!metrics_sha) throw new Error("metrics.csv not found in tree");
+      const blob = await octokit.rest.git.getBlob({
+        owner,
+        repo,
+        file_sha,
+      });
 
-  const metrics_blob = await octokit.rest.git.getBlob({
-    owner,
-    repo,
-    file_sha: metrics_sha,
-  });
-
-  const metrics_csv = Buffer.from(
-    metrics_blob.data.content,
-    "base64"
-  ).toString();
-  console.log(metrics_csv);
-  return metrics_csv;
+      const blob_string = Buffer.from(blob.data.content, "base64").toString();
+      return blob_string;
+    })
+  );
 }
 
 export type ListRefsResponseType =

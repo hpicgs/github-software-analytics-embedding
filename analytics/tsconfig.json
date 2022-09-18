@@ -1,7 +1,15 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/types"],
   "compilerOptions": {
     "outDir": "build"
   }
 }
+
+// Todos:
+// share types between frontend and analytics
+// test if uploading json works
+// add code to transform json to treemap config
+// Add benchmarking code to analytics pipeline
+// think about implementing compression
+// 

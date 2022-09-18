@@ -1,21 +1,23 @@
 import { Octokit } from "octokit";
-import { createActionAuth } from "@octokit/auth-action"
+import { createActionAuth } from "@octokit/auth-action";
 import "dotenv/config";
 
 if (!process.env.GITHUB_REPOSITORY)
   throw new Error("GITHUB_REPOSITORY environment variable is not set");
 
 const repo_path = process.env.GITHUB_REPOSITORY;
-const [owner, repo] = repo_path.split('/');
+const [owner, repo] = repo_path.split("/");
 const commit_sha = process.env.GITHUB_SHA || "default_tag";
 
 let octokit: Octokit;
 if (process.env.GITHUB_ACTIONS) {
   console.log("Running in GitHub Actions, using @octokit/auth-action");
-  octokit = new Octokit({ authStrategy: createActionAuth});
+  octokit = new Octokit({ authStrategy: createActionAuth });
 } else {
   if (!process.env.GITHUB_TOKEN)
-    throw new Error("GITHUB_TOKEN environment variable is not set. This needs to be set if you want to run this script outside of GitHub Actions");
+    throw new Error(
+      "GITHUB_TOKEN environment variable is not set. This needs to be set if you want to run this script outside of GitHub Actions"
+    );
   octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 }
 
@@ -46,14 +48,12 @@ async function createRef(ref: string, sha: string) {
       owner,
       repo,
       ref,
-      sha
+      sha,
     }
   );
 
   console.log(response);
 }
-
-
 
 async function createBlob(content: string) {
   console.log(`creating blob with content: ${content.substring(0, 10)} ...`);
@@ -71,11 +71,8 @@ async function createBlob(content: string) {
   console.log(response);
 }
 
-async function createTree(content: string): Promise<string> {
-  console.log(
-    `creating tree at ${owner}/${repo} with content: 
-    ${content.substring(0, 10)}...`
-  );
+async function createTree(csv: string, json: string): Promise<string> {
+  console.log(`creating tree at ${owner}/${repo}`);
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/trees`,
@@ -87,7 +84,13 @@ async function createTree(content: string): Promise<string> {
           path: "metrics.csv",
           mode: "100644",
           type: "blob",
-          content,
+          content: csv,
+        },
+        {
+          path: "metrics.json",
+          mode: "100644",
+          type: "blob",
+          content: json,
         },
       ],
     }
@@ -97,8 +100,10 @@ async function createTree(content: string): Promise<string> {
   return response.data.sha;
 }
 
-export async function saveMetrics(metrics_csv: string) {
-  //Todo: add the image to this call later
-  const tree_sha = await createTree(metrics_csv);
+export async function storeMetricsToRepo(
+  metrics_csv: string,
+  metrics_json: string
+) {
+  const tree_sha = await createTree(metrics_csv, metrics_json);
   await createRef(`refs/metrics/${commit_sha}`, tree_sha);
 }

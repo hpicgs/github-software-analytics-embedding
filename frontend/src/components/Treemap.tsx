@@ -1,3 +1,4 @@
+import { configFromMetrics } from "@/utils/treemap_helpers";
 import { useEffect, useState } from "react";
 import {
   gloperate,
@@ -18,7 +19,9 @@ export default function Treemap() {
     canvas = initialize("canvasElement");
     canvas.renderer = visualization.renderer as Renderer;
     //setCanvas(initialize("canvasElement"));
-    createConfig();
+    //createConfig();
+    configFromMetrics();
+
     loadConfig();
     //debugInit();
   }, []);
@@ -139,9 +142,9 @@ export default function Treemap() {
 
   return (
     <div>
-        <h1>Treemap</h1>
-        <div id="labelContainer" className="label-overlay"></div>
-        <canvas id="canvasElement" width="300" height="150"></canvas>
+      <h1>Treemap</h1>
+      <div id="labelContainer" className="label-overlay"></div>
+      <canvas id="canvasElement" width="300" height="150"></canvas>
     </div>
   );
 }
