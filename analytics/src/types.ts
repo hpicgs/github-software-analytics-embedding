@@ -7,7 +7,7 @@ export interface MetricsTableData {
   rows: FileMetrics[];
 }
 
-enum NodeType {
+export enum NodeType {
   FILE = "file",
   DIRECTORY = "directory",
 }
