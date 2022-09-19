@@ -10,9 +10,6 @@ import { DirectoryNode, FileNode, MetricsNode, NodeType } from "./types";
 const globPromise = promisify(glob);
 
 async function analyseRepository() {
-  if (!process.env.GITHUB_TOKEN)
-    throw new Error("GITHUB_TOKEN environment variable is not set");
-
   if (!process.env.REPOSITORY_PATH)
     throw new Error("REPOSITORY_PATH environment variable is not set");
   console.log(`REPOSITORY_PATH="${process.env.REPOSITORY_PATH}"`);
