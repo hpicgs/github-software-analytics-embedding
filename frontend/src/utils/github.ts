@@ -42,10 +42,15 @@ export async function getMetricsBlob(
 
   return await Promise.all(
     files.map(async (file) => {
-      const file_sha = response.data.tree.find(
+      const found_file = response.data.tree.find(
         (object) => object.path == file
-      )!.sha;
-      if (!file_sha) throw new Error(`${file} not found in tree object`);
+      );
+
+      const file_sha = found_file?.sha;
+      if (!file_sha) {
+        console.warn(`${file} not found in tree object`);
+        return "";
+      }
 
       const blob = await octokit.rest.git.getBlob({
         owner,
@@ -54,6 +59,7 @@ export async function getMetricsBlob(
       });
 
       const blob_string = Buffer.from(blob.data.content, "base64").toString();
+      console.log(blob_string);
       return blob_string;
     })
   );

@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import { parseMetrics } from "../utils/csv";
+import { parseMetrics, parseMetricsJSON } from "../utils/parse";
 import MetricsTable from "./MetricsTable";
 import { useParams } from 'react-router-dom';
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
-import { MetricsTableData } from "@analytics/types";
+import { MetricsNode, MetricsTableData } from "@analytics/types";
 import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
 import Treemap from "./Treemap";
-import { configFromMetricsJSON } from "@/utils/treemap_helpers";
 
 export default function Metrics() {
   let { owner, repo, commitSHA, branch } = useParams();
   
   const [data, setData] = useState<MetricsTableData>();
+  const [metricsTree, setMetricsTree] = useState<MetricsNode>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
@@ -36,11 +36,13 @@ export default function Metrics() {
       } 
       try {
         const [csv, json] = await getMetricsBlob(owner, repo, commitSHA);
+        const metricsTree = parseMetricsJSON(json)
+        console.log("tree:", metricsTree);
+        setMetricsTree(metricsTree);
         const parsedData = parseMetrics(csv);
-        configFromMetricsJSON(json);
-        console.log("Parsed CSV", parsedData);
         setData(parsedData);
       } catch (e) {
+        console.error(e);
         setError(true)
       } finally {
         setLoading(false);
@@ -62,7 +64,7 @@ export default function Metrics() {
         {error && <p>No metrics data found.</p>}
         {loading && <p>Loading...</p>}
         {data && <MetricsTable {...data} />}
-        <Treemap />
+        {metricsTree && <Treemap {...metricsTree} />}
       </Stack>
     </div>
   );
