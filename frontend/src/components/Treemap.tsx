@@ -55,7 +55,7 @@ export default function Treemap(metricsTree: MetricsNode) {
     <div>
       <h1>Treemap</h1>
       <div id="labelContainer" className="label-overlay"></div>
-      <canvas id="canvasElement" width="300" height="150"></canvas>
+      <canvas id="canvasElement" width="800" height="400"></canvas>
     </div>
   );
 }

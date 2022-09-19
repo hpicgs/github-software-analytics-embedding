@@ -1,7 +1,8 @@
 import { parseScript, Program } from "esprima";
 import { readFileSync } from "fs";
+import { Metrics } from "./types";
 
-export function getMetrics(filename: string) {
+export function getMetrics(filename: string): Metrics {
   const file = readFileSync(filename, "utf-8");
   const ast = parseScript(file, { loc: true, comment: true, range: true });
   const loc = getLoC(ast);

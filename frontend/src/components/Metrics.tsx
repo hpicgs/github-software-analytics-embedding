@@ -37,6 +37,7 @@ export default function Metrics() {
       try {
         const [csv, json] = await getMetricsBlob(owner, repo, commitSHA);
         const metricsTree = parseMetricsJSON(json)
+        
         console.log("tree:", metricsTree);
         setMetricsTree(metricsTree);
         const parsedData = parseMetrics(csv);

@@ -1,5 +1,6 @@
 import Papa from "papaparse";
 import { FileMetrics, MetricsNode, MetricsTableData } from "@analytics/types";
+import MetricsTree from "./metricstree";
 
 export function parseMetrics(csv: string): MetricsTableData {
   const parsed = Papa.parse<FileMetrics>(csv, {
@@ -12,7 +13,9 @@ export function parseMetrics(csv: string): MetricsTableData {
   };
 }
 
-export function parseMetricsJSON(json: string): MetricsNode {
+export function parseMetricsJSON(json: string): MetricsTree {
   const parsed = JSON.parse(json);
-  return parsed as MetricsNode;
+  const root_node = parsed as MetricsNode;
+  const metricsTree = new MetricsTree(root_node);
+  return metricsTree;
 }

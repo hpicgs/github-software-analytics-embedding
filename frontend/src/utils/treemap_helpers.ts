@@ -1,15 +1,55 @@
-import { DirectoryNode, MetricsNode, NodeType } from "@analytics/types";
-import { Configuration } from "treemaps";
+import {
+  DirectoryNode,
+  Metrics,
+  MetricsNode,
+  NodeType,
+} from "@analytics/types";
+import { keyframes } from "@emotion/react";
+import { Configuration, NodeSort, Visualization } from "treemaps";
+import MetricsTree from "./metricstree";
 
-export function configFromMetricsJSON(metricsTree: MetricsNode): Configuration {
+interface ValueMapping {
+  weights: keyof Metrics;
+  heights: keyof Metrics;
+  colors: keyof Metrics;
+}
+
+function getRelativeValues(metric: keyof Metrics) {}
+
+export function configFromMetricsJSON(
+  metricsTree: MetricsTree,
+  valueMapping: ValueMapping = {
+    weights: "loc",
+    heights: "loc",
+    colors: "loc",
+  }
+): Configuration {
   const config = new Configuration();
 
-  const tree = metricsTree as DirectoryNode;
+  const size = metricsTree.size;
+  const root = metricsTree.root;
   const edges: [number, number][] = [];
+  const names = new Map<number, string>();
+
+  const weights: number[] = [];
+  const heights: number[] = [];
+  const colors: number[] = [];
 
   function buildEdges(node: MetricsNode, parent = 0) {
     const index = edges.length;
+    names.set(index, node.name);
     edges.push([parent, index]);
+
+    weights.push(
+      node.metrics[valueMapping.weights] / root.metrics[valueMapping.weights]
+    );
+    heights.push(
+      node.metrics[valueMapping.heights] / root.metrics[valueMapping.heights]
+    );
+    colors.push(
+      node.metrics[valueMapping.colors] / root.metrics[valueMapping.colors]
+    );
+
     if (node.type === NodeType.DIRECTORY) {
       const directory = node as DirectoryNode;
       directory.children.forEach((child) => {
@@ -20,56 +60,16 @@ export function configFromMetricsJSON(metricsTree: MetricsNode): Configuration {
     }
   }
 
-  buildEdges(tree, 0);
+  names.set(0, root.name);
+  weights.push(1);
+  heights.push(1);
+  colors.push(1);
+  buildEdges(root, 0);
 
-  config.topology = {
-    edges,
-    format: "tupled",
-  };
-
-  config.buffers = [
-    {
-      identifier: "Alpha",
-      type: "uint8",
-      data: new Uint8Array([
-        0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-      ]),
-    },
-    { identifier: "Beta", type: "uint8", data: new Uint8Array(21) },
-    {
-      identifier: "Gamma",
-      type: "uint8",
-      data: new Uint8Array([
-        0, 0, 1, 2, 3, 4, 0, 5, 6, 7, 8, 0, 0, 9, 10, 11, 12, 13, 14, 15, 16,
-      ]),
-    },
-    { identifier: "Delta", type: "float32", data: new Float32Array(21) },
-    { identifier: "Epsilon", type: "uint8", data: new Uint8Array(21) },
-  ];
-
-  config.bufferViews = [
-    {
-      identifier: "Weight",
-      source: "buffer:Alpha",
-      transformations: [{ type: "propagate-up", operation: "sum" }],
-    },
-    {
-      identifier: "Beta-Transformed",
-      source: "buffer:Beta",
-      transformations: [
-        {
-          type: "range-transform",
-          sourceRange: [0.0, 64.0],
-          targetRange: [0.0, 0.75],
-        },
-      ],
-    },
-    {
-      identifier: "Gamma-Normalized",
-      source: "buffer:Gamma",
-      transformations: [{ type: "normalize", operation: "min-to-max" }],
-    },
-  ];
+  console.log(names);
+  console.log(weights);
+  console.log(heights);
+  console.log(colors);
 
   config.colors = [
     { identifier: "emphasis", space: "hex", value: "#00b0ff" },
@@ -78,46 +78,118 @@ export function configFromMetricsJSON(metricsTree: MetricsNode): Configuration {
     {
       identifier: "leaf",
       space: "hex",
-      values: ["#ffffff", "#fed500", "#fe8500", "#e62325"],
+      values: [
+        "#4575b4",
+        "#91bfdb",
+        "#e0f3f8",
+        "#ffffbf",
+        "#fee090",
+        "#fc8d59",
+        "#d73027",
+      ],
     },
     // { identifier: 'leaf', space: 'hex', values: ['#ffffff', '#5392ff', '#71cddd', '#34bc6e',
-    // '#95d13c', '#db7c00', '#ffb000', '#ff509e', '#9b82f3'] },
+    //      '#95d13c', '#db7c00', '#ffb000', '#ff509e', '#9b82f3'] },
   ];
 
   config.layout = {
     algorithm: "snake",
-    weight: "bufferView:Weight",
-    parentPadding: { type: "absolute", value: 0.02 },
-    siblingMargin: { type: "relative", value: 0.2 },
+    weight: "bufferView:weights",
+    sort: {
+      key: "bufferView:weights",
+      algorithm: NodeSort.Algorithm.Keep,
+    },
+    parentPadding: { type: "relative", value: 0.05 },
+    siblingMargin: { type: "relative", value: 0.05 },
     accessoryPadding: {
       type: "absolute",
       direction: "bottom",
-      value: [0.0, 0.04, 0.03],
+      value: [0.0, 0.02, 0.01, 0.0],
       relativeAreaThreshold: 0.4,
-      targetAspectRatio: 2.0,
+      targetAspectRatio: 8.0,
     },
-    cascade: false,
   };
 
-  config.labels = { innerNodeLayerRange: [1, 3], numTopInnerNodes: 4 };
-
   config.geometry = {
-    parentLayer: { showRoot: false },
+    parentLayer: { showRoot: true },
     leafLayers: [
       {
         colorMap: "color:leaf",
-        height: "bufferView:Beta-Transformed",
-        colors: "bufferView:Gamma-Normalized",
-      },
-      {
-        colorMap: "color:leaf",
-        height: "buffer:Delta",
-        colors: "buffer:Epsilon",
+        height: "bufferView:heights-normalized",
+        colors: "bufferView:colors-normalized",
       },
     ],
     emphasis: { outline: new Array<number>(), highlight: new Array<number>() },
     heightScale: 0.5,
   };
+
+  config.labels = {
+    innerNodeLayerRange: [0, 2],
+    numTopInnerNodes: 50,
+    numTopWeightNodes: 50,
+    numTopHeightNodes: 50,
+    numTopColorNodes: 50,
+  };
+
+  config.labels.callback = (
+    idsToLabel: Set<number>,
+    callback: Visualization.NameSetCallback
+  ) => callback(names);
+
+  config!.altered!.alter("labels");
+
+  config.topology = {
+    edges,
+    format: "tupled",
+  };
+
+  config.buffers = [
+    {
+      identifier: "source-weights",
+      type: "numbers",
+      data: weights,
+      linearization: "topology",
+    },
+    {
+      identifier: "source-heights",
+      type: "numbers",
+      data: heights,
+      linearization: "topology",
+    },
+    {
+      identifier: "source-colors",
+      type: "numbers",
+      data: colors,
+      linearization: "topology",
+    },
+  ];
+
+  config.bufferViews = [
+    {
+      identifier: "weights",
+      source: "buffer:source-weights",
+      transformations: [
+        { type: "fill-invalid", value: 0.0, invalidValue: -1.0 },
+        { type: "propagate-up", operation: "sum" },
+      ],
+    },
+    {
+      identifier: "heights-normalized",
+      source: "buffer:source-heights",
+      transformations: [
+        { type: "fill-invalid", value: 0.0, invalidValue: -1.0 },
+        { type: "normalize", operation: "zero-to-max" },
+      ],
+    },
+    {
+      identifier: "colors-normalized",
+      source: "buffer:source-colors",
+      transformations: [
+        { type: "fill-invalid", value: 0.0, invalidValue: -1.0 },
+        { type: "normalize", operation: "zero-to-max" },
+      ],
+    },
+  ];
 
   console.log("Config", JSON.stringify(config, null, 2));
   return config;

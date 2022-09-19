@@ -104,6 +104,11 @@ export async function storeMetricsToRepo(
   metrics_csv: string,
   metrics_json: string
 ) {
+  if (process.env.DEBUG) {
+    console.log("DEBUG mode enabled, skipping GitHub API calls");
+    return;
+  }
+
   const tree_sha = await createTree(metrics_csv, metrics_json);
   await createRef(`refs/metrics/${commit_sha}`, tree_sha);
 }

@@ -5,7 +5,13 @@ import { storeMetricsToRepo } from "./github";
 import { basename, extname, join } from "path";
 import { createObjectCsvStringifier } from "csv-writer";
 import { getMetrics } from "./metrics";
-import { DirectoryNode, FileNode, MetricsNode, NodeType } from "./types";
+import {
+  DirectoryNode,
+  FileNode,
+  Metrics,
+  MetricsNode,
+  NodeType,
+} from "./types";
 
 const globPromise = promisify(glob);
 
@@ -57,6 +63,30 @@ function safeReadDirSync(path: string) {
   return dirData;
 }
 
+function reduceMetrics(children: MetricsNode[]): Metrics {
+  const metricsList = children.reduce(
+    (result: Metrics[], element: MetricsNode) => {
+      if (element.metrics) {
+        result.push(element.metrics);
+      }
+      return result;
+    },
+    []
+  );
+
+  return metricsList.reduce(
+    (acc, cur) => ({
+      loc: acc.loc + cur.loc,
+      noc: acc.noc + cur.noc,
+      cloc: acc.cloc + cur.cloc,
+      //Todo this should not be accumulated
+      dc: acc.dc + cur.dc,
+      nof: acc.nof + cur.nof,
+    }),
+    { loc: 0, noc: 0, cloc: 0, dc: 0, nof: 0 }
+  );
+}
+
 function parseRepositoryTree(
   path: string,
   currentDepth = 0,
@@ -98,11 +128,21 @@ function parseRepositoryTree(
     if (dirData === null) return null;
 
     if (maxDepth === undefined || maxDepth > currentDepth) {
-      dirNode.children = dirData
-        .map((child) =>
-          parseRepositoryTree(join(path, child), currentDepth + 1)
-        )
-        .filter((e) => !!e);
+      dirNode.children = dirData.reduce(
+        (children: MetricsNode[], childPath: string) => {
+          const child = parseRepositoryTree(
+            join(path, childPath),
+            currentDepth + 1
+          );
+          if (child) {
+            children.push(child);
+          }
+          return children;
+        },
+        []
+      );
+
+      dirNode.metrics = reduceMetrics(dirNode.children);
     }
     return dirNode;
   }
