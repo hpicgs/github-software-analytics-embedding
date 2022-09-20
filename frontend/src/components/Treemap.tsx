@@ -1,5 +1,6 @@
+import MetricsTree from "@/utils/metricstree";
+import { parseMetricsJSON } from "@/utils/parse";
 import { configFromMetricsJSON as configFromMetricsTree } from "@/utils/treemap_helpers";
-import { MetricsNode } from "@analytics/types";
 import { useEffect, useState } from "react";
 import {
   gloperate,
@@ -9,7 +10,13 @@ import {
   Renderer,
 } from "treemaps";
 
-export default function Treemap(metricsTree: MetricsNode) {
+interface TreemapProps {
+  json: string
+}
+
+export default function Treemap({json}: TreemapProps) {
+  const metricsTree = parseMetricsJSON(json)
+
   const [config, setConfig] = useState<Configuration>(configFromMetricsTree(metricsTree));
   const [visualization, setVisualization] = useState<Visualization>(new Visualization());
 
