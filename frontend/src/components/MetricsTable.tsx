@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { MetricsTableData } from '../types/FileMetrics';
+import { MetricsTableData } from '@analytics/types';
 
 
 export default function MetricsTable({header, rows}: MetricsTableData) {

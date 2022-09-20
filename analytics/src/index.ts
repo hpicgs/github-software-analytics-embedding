@@ -1,151 +1,155 @@
-import { readFileSync, writeFileSync } from "fs";
+import { lstatSync, readdirSync, Stats, statSync, writeFileSync } from "fs";
 import { promisify } from "util";
 import glob from "glob";
+import { storeMetricsToRepo } from "./github";
+import { basename, extname, join } from "path";
+import { createObjectCsvStringifier } from "csv-writer";
+import { getMetrics } from "./metrics";
 import {
-  createSourceFile,
-  Node,
-  ScriptTarget,
-  SyntaxKind,
-  forEachChild,
-  getLeadingCommentRanges,
-  CommentRange,
-} from "typescript";
-import { saveMetrics } from "./github/api";
+  DirectoryNode,
+  FileNode,
+  Metrics,
+  MetricsNode,
+  NodeType,
+} from "./types";
 
 const globPromise = promisify(glob);
 
-async function processFiles() {
+async function analyseRepository() {
   if (!process.env.REPOSITORY_PATH)
     throw new Error("REPOSITORY_PATH environment variable is not set");
-  console.log("REPOSITORY_PATH=", process.env.REPOSITORY_PATH);
+  console.log(`REPOSITORY_PATH="${process.env.REPOSITORY_PATH}"`);
   const files = await globPromise(`${process.env.REPOSITORY_PATH}/**/*.ts`);
 
   console.log(files);
 
-  const csvData = [];
-  for (const filename of files) {
-    console.log(`Currently analysing ${filename}`);
-    const file = readFileSync(filename, "utf-8");
-    const ast = createSourceFile(
-      filename,
-      file.toString(),
-      ScriptTarget.Latest
-    );
+  const csvStringifier = createObjectCsvStringifier({
+    header: [
+      { id: "filename", title: "filename" },
+      { id: "loc", title: "Line of Code" },
+      { id: "noc", title: "Number of Comments" },
+      { id: "cloc", title: "Commented Lines of Code" },
+      { id: "dc", title: "Density of Comments" },
+      { id: "nof", title: "Number of Functions" },
+    ],
+  });
 
-    const comments = getComments(ast);
-    const loc = getLoC(ast);
-    const noc = getNoC(comments);
-    const cloc = getCommentLines(comments, ast.getFullText());
-    const dc = getDensityOfComments(loc + cloc, cloc);
-    const functionNumber = getNumberOfFunctions(ast);
-    csvData.push([filename, loc, noc, cloc, dc, functionNumber]);
-  }
-  let csv = "filename,LoC,NoC,CLoC, DC, Number of Functions\r\n";
-  for (const row of csvData) {
-    csv += row.join(",") + "\r\n";
-  }
+  const metrics = files.map((filename) => ({
+    filename,
+    ...getMetrics(filename),
+  }));
+  const header = csvStringifier.getHeaderString();
+  const csv = header + csvStringifier.stringifyRecords(metrics);
+  const metricsTree = parseRepositoryTree(process.env.REPOSITORY_PATH);
+  const json = JSON.stringify(metricsTree, null, 2);
+
   writeFileSync("metrics.csv", csv);
-  saveMetrics(csv);
+  writeFileSync("metrics.json", json);
+
+  storeMetricsToRepo(csv, json);
 }
 
-processFiles().catch((e) => {
+// Adopted from https://github.com/mihneadb/node-directory-tree/blob/master/lib/directory-tree.js#L21
+function safeReadDirSync(path: string) {
+  let dirData = [];
+  try {
+    dirData = readdirSync(path);
+  } catch (ex: any) {
+    if (ex.code == "EACCES" || ex.code == "EPERM") {
+      //User does not have permissions, ignore directory
+      return null;
+    } else throw ex;
+  }
+  return dirData;
+}
+
+function reduceMetrics(children: MetricsNode[]): Metrics {
+  const metricsList = children.reduce(
+    (result: Metrics[], element: MetricsNode) => {
+      if (element.metrics) {
+        result.push(element.metrics);
+      }
+      return result;
+    },
+    []
+  );
+
+  return metricsList.reduce(
+    (acc, cur) => ({
+      loc: acc.loc + cur.loc,
+      noc: acc.noc + cur.noc,
+      cloc: acc.cloc + cur.cloc,
+      //Todo this should not be accumulated
+      dc: acc.dc + cur.dc,
+      nof: acc.nof + cur.nof,
+    }),
+    { loc: 0, noc: 0, cloc: 0, dc: 0, nof: 0 }
+  );
+}
+
+function parseRepositoryTree(
+  path: string,
+  currentDepth = 0,
+  maxDepth: number | undefined = undefined
+): MetricsNode | null {
+  const extensions = /\.ts$/;
+  const name = basename(path);
+
+  let stats: Stats;
+  let lstats: Stats;
+
+  try {
+    stats = statSync(path);
+    lstats = lstatSync(path);
+  } catch (e) {
+    return null;
+  }
+
+  if (lstats.isSymbolicLink()) {
+    // Skip symbolic links
+    return null;
+  }
+
+  if (stats.isFile()) {
+    const ext = extname(path).toLowerCase();
+
+    // Skip if it does not match the extension regex
+    if (extensions && !extensions.test(ext)) return null;
+    const fileNode = {
+      path,
+      name,
+      type: NodeType.FILE,
+      metrics: getMetrics(path),
+    } as FileNode;
+    return fileNode;
+  } else if (stats.isDirectory()) {
+    const dirNode = { path, name, type: NodeType.DIRECTORY } as DirectoryNode;
+    let dirData = safeReadDirSync(path);
+    if (dirData === null) return null;
+
+    if (maxDepth === undefined || maxDepth > currentDepth) {
+      dirNode.children = dirData.reduce(
+        (children: MetricsNode[], childPath: string) => {
+          const child = parseRepositoryTree(
+            join(path, childPath),
+            currentDepth + 1
+          );
+          if (child) {
+            children.push(child);
+          }
+          return children;
+        },
+        []
+      );
+
+      dirNode.metrics = reduceMetrics(dirNode.children);
+    }
+    return dirNode;
+  }
+  return null;
+}
+
+analyseRepository().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-
-/*
-Metric: Lines of Code
-TODO: eliminate blank lines -> when parsing the file probably
-*/
-function getLoC(ast: Node): number {
-  const fullText = ast.getFullText();
-  return (fullText.match(/\n/g) || "").length + 1;
-}
-
-/*
-Metric: Numbers of Comments
--> number of comments in a code file
--> single-line comments count as 1
--> multi-line comments count as 1
-*/
-function getComments(ast: Node) {
-  let comments: CommentRange[] = [];
-  const fullText = ast.getFullText();
-  function visit(node: Node) {
-    forEachChild(node, visit);
-
-    const commentRange = getLeadingCommentRanges(fullText, node.getFullStart());
-    if (commentRange) {
-      comments = comments.concat(commentRange);
-    }
-  }
-  forEachChild(ast, visit);
-  const uniqueComments = comments.reduce((acc: CommentRange[], curr) => {
-    if (!acc.some((t) => curr.end === t.end && curr.pos === t.pos)) {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
-
-  return uniqueComments;
-}
-
-function getNoC(comments: CommentRange[]): number {
-  return comments.length;
-}
-
-/*
-Metric: Comment Lines
--> number of comment lines in a code file
--> single-line count as 1
--> multi-line comments count as multiple lines 
-*/
-
-function getCommentLines(comments: CommentRange[], fullText: string): number {
-  let commentLines = 0;
-  for (const comment of comments) {
-    commentLines +=
-      (fullText.substring(comment.pos, comment.end).match(/\n/g) || "").length +
-      1;
-  }
-  return commentLines;
-}
-
-/*
-Metric: Density of Comments (DC)
--> ratio of comment lines to all lines
-*/
-function getDensityOfComments(allLines: number, cloc: number): number {
-  return cloc / allLines;
-}
-
-/*
-Metric: Nesting Level (NL)
--> depth of enclosing control structures
-TODO: implement evalutating of nesting level (NL)
-*/
-
-/*
-MethodDeclaration: class member
-FunctionDeclaration: function Keyword
-ArrowFUnction: ArrowFUnction
-
-
-- get set Accessor? 
-- Constructor?
-*/
-function getNumberOfFunctions(ast: Node): number {
-  let numberOfFunctions = 0;
-  function visit(node: Node) {
-    forEachChild(node, visit);
-    if (
-      node.kind === SyntaxKind.MethodDeclaration ||
-      node.kind === SyntaxKind.FunctionDeclaration ||
-      node.kind === SyntaxKind.ArrowFunction
-    ) {
-      numberOfFunctions++;
-    }
-  }
-  forEachChild(ast, visit);
-  return numberOfFunctions;
-}

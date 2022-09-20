@@ -1,15 +1,26 @@
 import { useState, useEffect } from "react";
-import parseMetrics from "../utils/csv";
+import { parseMetrics } from "../utils/parse";
 import MetricsTable from "./MetricsTable";
-import { useParams } from 'react-router-dom';
-import { getCommitSHA, getMetrics } from "@/utils/github";
-import {MetricsTableData} from "../types/FileMetrics";
+import { getCommitSHA, getMetricsBlob } from "@/utils/github";
+import { MetricsTableData } from "@analytics/types";
 import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
+import Treemap from "./Treemap";
 
-export default function Metrics() {
-  let { owner, repo, commitSHA, branch } = useParams();
-  
+type MetricsProps = {
+  owner?: string;
+  repo?: string;
+  commitSHA?: string;
+  branch?: string;
+};
+
+export default function Metrics({
+  owner,
+  repo,
+  commitSHA,
+  branch,
+}: MetricsProps) {
   const [data, setData] = useState<MetricsTableData>();
+  const [json, setJson] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
@@ -22,8 +33,8 @@ export default function Metrics() {
     </Typography>,
     <Typography key="3" color="text.primary">
       {branch ? branch : commitSHA}
-    </Typography>
-  ]
+    </Typography>,
+  ];
 
   useEffect(() => {
     async function fetchData() {
@@ -31,13 +42,14 @@ export default function Metrics() {
       if (!commitSHA) {
         if (!branch) return;
         commitSHA = await getCommitSHA(owner, repo, branch);
-      } 
+      }
       try {
-        const csv = await getMetrics(owner, repo, commitSHA);
+        const [csv, json] = await getMetricsBlob(owner, repo, commitSHA);
+        setJson(json);
         const parsedData = parseMetrics(csv);
-        console.log(parsedData);
         setData(parsedData);
       } catch (e) {
+        console.error(e);
         setError(true)
       } finally {
         setLoading(false);
@@ -59,6 +71,7 @@ export default function Metrics() {
         {error && <p>No metrics data found.</p>}
         {loading && <p>Loading...</p>}
         {data && <MetricsTable {...data} />}
+        {json && <Treemap json={json} />}
       </Stack>
     </div>
   );
