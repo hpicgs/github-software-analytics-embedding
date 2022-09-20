@@ -7,9 +7,19 @@ import { MetricsNode, MetricsTableData } from "@analytics/types";
 import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
 import Treemap from "./Treemap";
 
-export default function Metrics() {
-  let { owner, repo, commitSHA, branch } = useParams();
-  
+type MetricsProps = {
+  owner?: string;
+  repo?: string;
+  commitSHA?: string;
+  branch?: string;
+};
+
+export default function Metrics({
+  owner,
+  repo,
+  commitSHA,
+  branch,
+}: MetricsProps) {
   const [data, setData] = useState<MetricsTableData>();
   const [metricsTree, setMetricsTree] = useState<MetricsNode>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -24,8 +34,8 @@ export default function Metrics() {
     </Typography>,
     <Typography key="3" color="text.primary">
       {branch ? branch : commitSHA}
-    </Typography>
-  ]
+    </Typography>,
+  ];
 
   useEffect(() => {
     async function fetchData() {
@@ -33,7 +43,7 @@ export default function Metrics() {
       if (!commitSHA) {
         if (!branch) return;
         commitSHA = await getCommitSHA(owner, repo, branch);
-      } 
+      }
       try {
         const [csv, json] = await getMetricsBlob(owner, repo, commitSHA);
         const metricsTree = parseMetricsJSON(json)
