@@ -1,0 +1,3 @@
+filename,LoC,NoC,CLoC, DC, Number of Functions
+../testrepo/test1.ts,17,1,1,0.05555555555555555,0
+../testrepo/testfolder/test2.ts,9,3,3,0.25,0

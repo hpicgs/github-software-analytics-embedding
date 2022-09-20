@@ -9,9 +9,7 @@ const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);
 
 root.render(
-  <StrictMode>
-    <BrowserRouter basename="/github-software-analytics-embedding">
-      <App />
-    </BrowserRouter>
-  </StrictMode>
+  <BrowserRouter basename="/github-software-analytics-embedding">
+    <App />
+  </BrowserRouter>
 );

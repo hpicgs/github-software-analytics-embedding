@@ -19,7 +19,8 @@
     "sourceMap": true,
     "types": ["vite/client"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@analytics/*": ["../analytics/src/*"]
     }
   },
   "include": ["src"],
