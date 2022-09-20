@@ -24,8 +24,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'pnpm'
+          cache: "pnpm"
           cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install treemaps library 📦
+        run: |
+          cd frontend
+          git clone --branch hiviser_deployment https://${{ secrets.SEERENE_TREEMAPS_DEPLOY_USER }}:${{ secrets.SEERENE_TREEMAPS_DEPLOY_TOKEN }}@gitlab.hpi3d.de/seerene/treemaps.git
+          cd treemaps
+          npm run build-lib
 
       - name: Install and Build 🔧
         run: |
