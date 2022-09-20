@@ -5,6 +5,7 @@
   "homepage": "https://hpicgs.github.io/github-software-analytics-embedding/",
   "scripts": {
     "build": "tsc --noEmit && vite build",
+    "build:embed": "tsc --noEmit && vite build --config vite.config-embed.ts",
     "deploy": "gh-pages -d dist",
     "dev": "vite",
     "preinstall": "npx only-allow pnpm",
