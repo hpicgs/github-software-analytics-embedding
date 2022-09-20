@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { parseMetrics, parseMetricsJSON } from "../utils/parse";
+import { parseMetrics } from "../utils/parse";
 import MetricsTable from "./MetricsTable";
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
 import { MetricsTableData } from "@analytics/types";
 import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
 import Treemap from "./Treemap";
-import MetricsTree from "@/utils/metricstree";
 
 type MetricsProps = {
   owner?: string;
