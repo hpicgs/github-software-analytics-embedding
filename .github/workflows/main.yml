@@ -15,13 +15,13 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: 'actions/checkout@v3'
+        uses: "actions/checkout@v3"
       - name: Bump version and push tag 🏷
         uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
-       
+
   deploy:
     name: Deploy HiViSer Frontend to GitHub Pages 🚀
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
@@ -40,8 +40,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: 'pnpm'
+          cache: "pnpm"
           cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install treemaps library 📦
+        run: |
+          cd frontend
+          git clone --branch hiviser_deployment https://${{ secrets.SEERENE_TREEMAPS_DEPLOY_USER }}:${{ secrets.SEERENE_TREEMAPS_DEPLOY_TOKEN }}@gitlab.hpi3d.de/seerene/treemaps.git
+          cd treemaps
+          npm install
+          npm run build-lib
 
       - name: Install and Build 🔧
         run: |
