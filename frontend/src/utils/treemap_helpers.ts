@@ -7,13 +7,13 @@ interface ValueMapping {
   colors: keyof Metrics;
 }
 
-export function createFileTree(rows: FileMetrics[]): FileTree {
-  const fileTree = {
-    name: "root",
+export function createFileTree(rows: FileMetrics[]): TreeNode {
+  const rootNode = {
+    name: "/",
     children: [],
   } as TreeNode;
   rows.forEach((row) => {
-    const filenames = row.filename.split("/");
+    const filenames = row.filename.replace("./", "").split("/");
     filenames.reduce((r, name) => {
       if (!r.children.find((c) => c.name === name)) {
         const child = {
@@ -26,15 +26,19 @@ export function createFileTree(rows: FileMetrics[]): FileTree {
         r.children.push(child);
       }
       return r.children.find((c) => c.name === name)!;
-    }, fileTree);
+    }, rootNode);
   });
 
-  console.log(fileTree);
-  return { root: fileTree };
+  console.log(rootNode);
+  if (rootNode.children.length === 1) {
+    return rootNode.children[0];
+  }
+
+  return rootNode;
 }
 
 export function configFromFileTree(
-  fileTree: FileTree,
+  fileTreeRoot: TreeNode,
   valueMapping: ValueMapping = {
     weights: "loc",
     heights: "loc",
@@ -43,41 +47,34 @@ export function configFromFileTree(
 ): Configuration {
   const config = new Configuration();
 
-  const root = fileTree.root;
   const edges: [number, number][] = [];
   const names = new Map<number, string>();
 
-  const weights: number[] = [];
-  const heights: number[] = [];
-  const colors: number[] = [];
-
-  names.set(0, root.name);
-  weights.push(1);
-  heights.push(1);
-  colors.push(1);
+  const weights: number[] = [0];
+  const heights: number[] = [0];
+  const colors: number[] = [0];
 
   function buildEdges(node: TreeNode, parent = 0) {
-    const index = edges.length;
+    const index = edges.length + 1;
     names.set(index, node.name);
     edges.push([parent, index]);
+    if (node.metrics) {
+      weights.push(node.metrics[valueMapping.weights]);
+      heights.push(node.metrics[valueMapping.heights]);
+      colors.push(node.metrics[valueMapping.colors]);
+    } else {
+      weights.push(0);
+      heights.push(0);
+      colors.push(0);
+    }
     node.children.forEach((child) => {
-      if (child) {
-        buildEdges(child, index);
-        if (child.metrics) {
-          weights.push(child.metrics[valueMapping.weights]);
-          heights.push(child.metrics[valueMapping.heights]);
-          colors.push(child.metrics[valueMapping.colors]);
-        } else {
-          weights.push(0);
-          heights.push(0);
-          colors.push(0);
-        }
-      }
+      buildEdges(child, index);
     });
   }
-  buildEdges(root, 0);
+  buildEdges(fileTreeRoot);
 
-  console.log(names);
+  console.log("names", names);
+  console.log("edges", edges);
   console.log("weights", weights);
   console.log("heights", heights);
   console.log("colors", colors);

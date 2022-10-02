@@ -1,6 +1,4 @@
-import MetricsTree from "@/utils/metricstree";
-import { parseMetricsJSON } from "@/utils/parse";
-import { configFromFileTree, configFromMetricsJSON as configFromMetricsTree, createFileTree } from "@/utils/treemap_helpers";
+import { configFromFileTree, createFileTree } from "@/utils/treemap_helpers";
 import { MetricsTableData } from "@analytics/types";
 import { useEffect, useState } from "react";
 import {
