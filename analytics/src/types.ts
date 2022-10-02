@@ -1,15 +1,5 @@
-export interface FileMetrics {
-  [key: string]: any;
-}
-
-export interface MetricsTableData {
-  header: string[];
-  rows: FileMetrics[];
-}
-
-export enum NodeType {
-  FILE = "file",
-  DIRECTORY = "directory",
+export interface FileMetrics extends Metrics {
+  filename: string;
 }
 
 export interface Metrics {
@@ -20,18 +10,17 @@ export interface Metrics {
   nof: number;
 }
 
-export interface MetricsNode {
-  path: string;
+export interface MetricsTableData {
+  header: string[];
+  rows: FileMetrics[];
+}
+
+export interface FileTree {
+  root: TreeNode;
+}
+
+export interface TreeNode {
   name: string;
-  type: NodeType;
-  metrics: Metrics;
-}
-
-export interface DirectoryNode extends MetricsNode {
-  type: NodeType.DIRECTORY;
-  children: MetricsNode[];
-}
-
-export interface FileNode extends MetricsNode {
-  type: NodeType.FILE;
+  children: TreeNode[];
+  metrics?: Metrics;
 }

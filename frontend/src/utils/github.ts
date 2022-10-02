@@ -21,7 +21,7 @@ export async function getMetricsBlob(
   owner: string,
   repo: string,
   commit_sha: string,
-  files: string[] = ["metrics.csv", "metrics.json"]
+  files: string[] = ["metrics.csv"]
 ): Promise<string[]> {
   const ref = await octokit.rest.git.getRef({
     owner,

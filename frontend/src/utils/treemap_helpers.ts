@@ -1,12 +1,5 @@
-import {
-  DirectoryNode,
-  Metrics,
-  MetricsNode,
-  NodeType,
-} from "@analytics/types";
-import { keyframes } from "@emotion/react";
+import { FileMetrics, FileTree, Metrics, TreeNode } from "@analytics/types";
 import { Configuration, NodeSort, Visualization } from "treemaps";
-import MetricsTree from "./metricstree";
 
 interface ValueMapping {
   weights: keyof Metrics;
@@ -14,8 +7,34 @@ interface ValueMapping {
   colors: keyof Metrics;
 }
 
-export function configFromMetricsJSON(
-  metricsTree: MetricsTree,
+export function createFileTree(rows: FileMetrics[]): FileTree {
+  const fileTree = {
+    name: "root",
+    children: [],
+  } as TreeNode;
+  rows.forEach((row) => {
+    const filenames = row.filename.split("/");
+    filenames.reduce((r, name) => {
+      if (!r.children.find((c) => c.name === name)) {
+        const child = {
+          name,
+          children: [],
+        } as TreeNode;
+        if (name === filenames[filenames.length - 1]) {
+          child.metrics = row;
+        }
+        r.children.push(child);
+      }
+      return r.children.find((c) => c.name === name)!;
+    }, fileTree);
+  });
+
+  console.log(fileTree);
+  return { root: fileTree };
+}
+
+export function configFromFileTree(
+  fileTree: FileTree,
   valueMapping: ValueMapping = {
     weights: "loc",
     heights: "loc",
@@ -24,8 +43,7 @@ export function configFromMetricsJSON(
 ): Configuration {
   const config = new Configuration();
 
-  const size = metricsTree.size;
-  const root = metricsTree.root;
+  const root = fileTree.root;
   const edges: [number, number][] = [];
   const names = new Map<number, string>();
 
@@ -33,41 +51,36 @@ export function configFromMetricsJSON(
   const heights: number[] = [];
   const colors: number[] = [];
 
-  function buildEdges(node: MetricsNode, parent = 0) {
-    const index = edges.length;
-    names.set(index, node.name);
-    edges.push([parent, index]);
-
-    weights.push(
-      node.metrics[valueMapping.weights] / root.metrics[valueMapping.weights]
-    );
-    heights.push(
-      node.metrics[valueMapping.heights] / root.metrics[valueMapping.heights]
-    );
-    colors.push(
-      node.metrics[valueMapping.colors] / root.metrics[valueMapping.colors]
-    );
-
-    if (node.type === NodeType.DIRECTORY) {
-      const directory = node as DirectoryNode;
-      directory.children.forEach((child) => {
-        if (child) {
-          buildEdges(child, index);
-        }
-      });
-    }
-  }
-
   names.set(0, root.name);
   weights.push(1);
   heights.push(1);
   colors.push(1);
+
+  function buildEdges(node: TreeNode, parent = 0) {
+    const index = edges.length;
+    names.set(index, node.name);
+    edges.push([parent, index]);
+    node.children.forEach((child) => {
+      if (child) {
+        buildEdges(child, index);
+        if (child.metrics) {
+          weights.push(child.metrics[valueMapping.weights]);
+          heights.push(child.metrics[valueMapping.heights]);
+          colors.push(child.metrics[valueMapping.colors]);
+        } else {
+          weights.push(0);
+          heights.push(0);
+          colors.push(0);
+        }
+      }
+    });
+  }
   buildEdges(root, 0);
 
   console.log(names);
-  console.log(weights);
-  console.log(heights);
-  console.log(colors);
+  console.log("weights", weights);
+  console.log("heights", heights);
+  console.log("colors", colors);
 
   config.colors = [
     { identifier: "emphasis", space: "hex", value: "#00b0ff" },

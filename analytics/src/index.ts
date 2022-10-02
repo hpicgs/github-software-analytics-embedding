@@ -18,11 +18,11 @@ async function analyseRepository() {
   const csvStringifier = createObjectCsvStringifier({
     header: [
       { id: "filename", title: "filename" },
-      { id: "loc", title: "Line of Code" },
-      { id: "noc", title: "Number of Comments" },
-      { id: "cloc", title: "Commented Lines of Code" },
-      { id: "dc", title: "Density of Comments" },
-      { id: "nof", title: "Number of Functions" },
+      { id: "loc", title: "loc" }, // Lines of Code
+      { id: "noc", title: "noc" }, // Number of Comments
+      { id: "cloc", title: "cloc" }, //Commented Lines of Code
+      { id: "dc", title: "dc" }, // Density of Comments
+      { id: "nof", title: "nof" }, // Number of Functions
     ],
   });
 
