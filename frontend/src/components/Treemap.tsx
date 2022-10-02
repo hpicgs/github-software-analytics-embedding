@@ -22,6 +22,11 @@ export default function Treemap({json}: TreemapProps) {
 
   let canvas: gloperate.Canvas | undefined = undefined;
   useEffect(() => {
+    // This is a workaround to get the Treemap library to look for the font files in the right place
+    const base = import.meta.env.VITE_BASEN_NAME ? `/${import.meta.env.VITE_BASEN_NAME}` : "";
+    (window as any).SeereneConstants = {
+      "STATIC_DIRECTORY": `${base}/assets`
+    }
     canvas = initialize("canvasElement");
     canvas.renderer = visualization.renderer as Renderer;
     console.log("cfg:", config);
@@ -32,6 +37,7 @@ export default function Treemap({json}: TreemapProps) {
   function loadConfig() {
     console.log("loadConfig");
     if (config && visualization && canvas) {
+      
       visualization.configuration = config;
 
       console.log("Visualization:", visualization);

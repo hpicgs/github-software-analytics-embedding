@@ -5,11 +5,11 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
 const container = document.getElementById("root") as HTMLElement;
-
 const root = createRoot(container);
+const basename = import.meta.env.VITE_BASE_NAME ? import.meta.env.VITE_BASE_NAME : "/";
 
 root.render(
-  <BrowserRouter basename="/github-software-analytics-embedding">
+  <BrowserRouter basename={basename}>
     <App />
   </BrowserRouter>
 );

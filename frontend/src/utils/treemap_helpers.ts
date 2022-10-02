@@ -14,8 +14,6 @@ interface ValueMapping {
   colors: keyof Metrics;
 }
 
-function getRelativeValues(metric: keyof Metrics) {}
-
 export function configFromMetricsJSON(
   metricsTree: MetricsTree,
   valueMapping: ValueMapping = {
@@ -125,10 +123,10 @@ export function configFromMetricsJSON(
 
   config.labels = {
     innerNodeLayerRange: [0, 2],
-    numTopInnerNodes: 50,
-    numTopWeightNodes: 50,
-    numTopHeightNodes: 50,
-    numTopColorNodes: 50,
+    numTopInnerNodes: 4,
+    numTopWeightNodes: 4,
+    numTopHeightNodes: 4,
+    numTopColorNodes: 4,
   };
 
   config.labels.callback = (
