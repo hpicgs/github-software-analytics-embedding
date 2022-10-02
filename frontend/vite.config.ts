@@ -1,11 +1,15 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import type { UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(({ command, mode }) => {
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd(), "") };
+  const base = process.env.VITE_BASE_NAME
+    ? `/${process.env.VITE_BASE_NAME}/`
+    : "/";
   const config: UserConfig = {
-    base: "/github-software-analytics-embedding/",
+    base,
     plugins: [react(), tsconfigPaths()],
     resolve: {
       alias: {
