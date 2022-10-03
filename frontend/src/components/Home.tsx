@@ -24,7 +24,7 @@ export default function Home() {
 
   return (
     <Container>
-      <h1>HiViSer Metrics Dashboard</h1>
+      <h1>Metrics Dashboard</h1>
       <Stack spacing={4}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

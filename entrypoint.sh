@@ -4,7 +4,7 @@
 echo $(tokei ./src -o json > metrics.json)
 
 if [[ -z "${GITHUB_TOKEN}" ]]; then
-  echo "GITHUB_TOKEN is not set. Stopping Hiviser Action."
+  echo "GITHUB_TOKEN is not set. Stopping Action."
   exit 0
 fi
 

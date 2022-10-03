@@ -26,8 +26,8 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v3
 
-      - name: Run Hiviser Action
-        uses: hpicgs/hiviser-action@v0
+      - name: Run Analytics Treemap Embedding Action 🚀
+        uses: hpicgs/github-software-analytics-embedding@v0
         with:
           # Optional, use if you want to analyse a specific folder
           repository_path: ./
