@@ -71,7 +71,7 @@ async function createBlob(content: string) {
   console.log(response);
 }
 
-async function createTree(csv: string, json: string): Promise<string> {
+async function createTree(csv: string): Promise<string> {
   console.log(`creating tree at ${owner}/${repo}`);
 
   const response = await octokit.request(
@@ -86,12 +86,6 @@ async function createTree(csv: string, json: string): Promise<string> {
           type: "blob",
           content: csv,
         },
-        {
-          path: "metrics.json",
-          mode: "100644",
-          type: "blob",
-          content: json,
-        },
       ],
     }
   );
@@ -100,15 +94,12 @@ async function createTree(csv: string, json: string): Promise<string> {
   return response.data.sha;
 }
 
-export async function storeMetricsToRepo(
-  metrics_csv: string,
-  metrics_json: string
-) {
+export async function storeMetricsToRepo(metrics_csv: string) {
   if (process.env.DEBUG) {
     console.log("DEBUG mode enabled, skipping GitHub API calls");
     return;
   }
 
-  const tree_sha = await createTree(metrics_csv, metrics_json);
+  const tree_sha = await createTree(metrics_csv);
   await createRef(`refs/metrics/${commit_sha}`, tree_sha);
 }
