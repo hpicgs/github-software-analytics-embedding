@@ -20,7 +20,6 @@ export default function Metrics({
   branch,
 }: MetricsProps) {
   const [data, setData] = useState<MetricsTableData>();
-  const [json, setJson] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
@@ -44,9 +43,9 @@ export default function Metrics({
         commitSHA = await getCommitSHA(owner, repo, branch);
       }
       try {
-        const [csv, json] = await getMetricsBlob(owner, repo, commitSHA);
-        setJson(json);
+        const [csv] = await getMetricsBlob(owner, repo, commitSHA);
         const parsedData = parseMetrics(csv);
+        console.log("parsedData:", parsedData);
         setData(parsedData);
       } catch (e) {
         console.error(e);
@@ -71,7 +70,7 @@ export default function Metrics({
         {error && <p>No metrics data found.</p>}
         {loading && <p>Loading...</p>}
         {data && <MetricsTable {...data} />}
-        {json && <Treemap json={json} />}
+        {data && <Treemap {...data} />}
       </Stack>
     </div>
   );

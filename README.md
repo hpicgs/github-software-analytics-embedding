@@ -2,11 +2,9 @@
 Seminar Project of the Seminar "Advanced Techniques for Analysis and Visualization of Software Data" of CGS, HPI and DEF in the Summer Term 2022
 
 # Usage
-⚠ This will not work until we made our first release
-
-Create a new GitHub Actions workflow in your project, e.g. at .github/workflows/hiviser.yml. The content of the file should be in the following format:
+Create a new GitHub Actions workflow in your project, e.g. at `.github/workflows/analytics-embedding.yml`. The content of the file should be in the following format:
 ```yaml
-name: HiViSer
+name: Analytics Treemap Embedding
 
 on:
   # Trigger the workflow on push or pull request,
@@ -14,15 +12,14 @@ on:
   push:
     branches:
       - main
-  # Replace pull_request with pull_request_target if you
-  # plan to use this action with forks, see the Limitations section
+      
   pull_request:
     branches:
       - main
 
 jobs:
-  run-hiviser:
-    name: Run HiViSer
+  analytics-embedding:
+    name: Run Analytics Treemap Embedding 🔎
     runs-on: ubuntu-latest
 
     steps:
@@ -31,9 +28,11 @@ jobs:
 
       - name: Run Hiviser Action
         uses: hpicgs/hiviser-action@v0
-        # Optional, use if you want to analyse a specific folder
         with:
+          # Optional, use if you want to analyse a specific folder
           repository_path: ./
+          # Optional to enable benchmarking
+          benchmark: true
 ```
 
 ## Development

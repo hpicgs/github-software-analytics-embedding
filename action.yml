@@ -18,8 +18,13 @@ inputs:
     description: >
       The root directory of the repository.
     default: "."
+  benchmark:
+    description: >
+      Enable benchmarking to time the different steps of the action.
+    default: "false"
 runs:
   using: "docker"
   image: "Dockerfile"
   env:
     REPOSITORY_PATH: ${{ inputs.repository_path }}
+    BENCHMARK: ${{ inputs.benchmark }}

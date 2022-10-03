@@ -32,7 +32,7 @@ jobs:
           cd frontend
           git clone --branch hiviser_deployment https://${{ secrets.SEERENE_TREEMAPS_DEPLOY_USER }}:${{ secrets.SEERENE_TREEMAPS_DEPLOY_TOKEN }}@gitlab.hpi3d.de/seerene/treemaps.git
           cd treemaps
-          npm i
+          npm install
           npm run build-lib
 
       - name: Install and Build 🔧

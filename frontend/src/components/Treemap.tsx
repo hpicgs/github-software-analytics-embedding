@@ -1,6 +1,5 @@
-import MetricsTree from "@/utils/metricstree";
-import { parseMetricsJSON } from "@/utils/parse";
-import { configFromMetricsJSON as configFromMetricsTree } from "@/utils/treemap_helpers";
+import { configFromFileTree, createFileTree } from "@/utils/treemap_helpers";
+import { MetricsTableData } from "@analytics/types";
 import { useEffect, useState } from "react";
 import {
   gloperate,
@@ -10,18 +9,20 @@ import {
   Renderer,
 } from "treemaps";
 
-interface TreemapProps {
-  json: string
-}
 
-export default function Treemap({json}: TreemapProps) {
-  const metricsTree = parseMetricsJSON(json)
+export default function Treemap({header, rows}: MetricsTableData) {
+  const fileTree = createFileTree(rows)
 
-  const [config, setConfig] = useState<Configuration>(configFromMetricsTree(metricsTree));
+  const [config, setConfig] = useState<Configuration>(configFromFileTree(fileTree));
   const [visualization, setVisualization] = useState<Visualization>(new Visualization());
 
   let canvas: gloperate.Canvas | undefined = undefined;
   useEffect(() => {
+    // This is a workaround to get the Treemap library to look for the font files in the right place
+    const base = import.meta.env.VITE_BASEN_NAME ? `/${import.meta.env.VITE_BASEN_NAME}` : "";
+    (window as any).SeereneConstants = {
+      "STATIC_DIRECTORY": `${base}/assets`
+    }
     canvas = initialize("canvasElement");
     canvas.renderer = visualization.renderer as Renderer;
     console.log("cfg:", config);
@@ -32,6 +33,7 @@ export default function Treemap({json}: TreemapProps) {
   function loadConfig() {
     console.log("loadConfig");
     if (config && visualization && canvas) {
+      
       visualization.configuration = config;
 
       console.log("Visualization:", visualization);
