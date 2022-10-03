@@ -1,9 +1,10 @@
-import Home from "./components/Home";
-import NotFound from "./components/NotFound";
 import { Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Container } from "@mui/material";
 import MetricsPage from "./components/MetricsPage";
+import RepoPage from "./components/RepoPage";
+import Home from "./components/Home";
+import NotFound from "./components/NotFound";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
             path="/:owner/:repo/branches/:branch"
             element={<MetricsPage />}
           />
+          <Route path="/:owner/:repo" element={<RepoPage />} />
           <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
