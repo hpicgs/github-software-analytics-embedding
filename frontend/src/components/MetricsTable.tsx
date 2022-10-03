@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { MetricsTableData } from '@analytics/types';
+import { MetricsTableData, Metrics } from '@analytics/types';
 
 
 export default function MetricsTable({header, rows}: MetricsTableData) {
@@ -28,7 +28,7 @@ export default function MetricsTable({header, rows}: MetricsTableData) {
             >
             {header.map((key) => (
               <TableCell component="th" scope="row" key={key + row.filename}>
-                {row[key]}
+                {row[key as keyof Metrics]}
               </TableCell>
             ))}
             </TableRow>

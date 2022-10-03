@@ -9,7 +9,6 @@ export interface Metrics {
   dc: number;
   nof: number;
 }
-
 export interface MetricsTableData {
   header: string[];
   rows: FileMetrics[];

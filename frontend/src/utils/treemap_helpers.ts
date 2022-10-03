@@ -1,4 +1,4 @@
-import { FileMetrics, FileTree, Metrics, TreeNode } from "@analytics/types";
+import { FileMetrics, Metrics, TreeNode } from "@analytics/types";
 import { Configuration, NodeSort, Visualization } from "treemaps";
 
 interface ValueMapping {
