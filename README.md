@@ -2,8 +2,6 @@
 Seminar Project of the Seminar "Advanced Techniques for Analysis and Visualization of Software Data" of CGS, HPI and DEF in the Summer Term 2022
 
 # Usage
-⚠ This will not work until we made our first release
-
 Create a new GitHub Actions workflow in your project, e.g. at `.github/workflows/analytics-embedding.yml`. The content of the file should be in the following format:
 ```yaml
 name: Analytics Treemap Embedding
@@ -14,8 +12,7 @@ on:
   push:
     branches:
       - main
-  # Replace pull_request with pull_request_target if you
-  # plan to use this action with forks, see the Limitations section
+      
   pull_request:
     branches:
       - main
