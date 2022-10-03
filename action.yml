@@ -1,5 +1,5 @@
-name: "HiViSer - Action"
-description: "HiViSer visualisations for your repository"
+name: "Analytics Treemap Embedding Action"
+description: "A Github Action that provides code metrics and treemap visualisations for your typescript repository"
 branding:
   icon: "search"
   color: "blue"
