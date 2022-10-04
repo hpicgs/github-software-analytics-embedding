@@ -10,9 +10,11 @@ export default function Home() {
   return (
     <Container>
       <h1>Metrics Dashboard</h1>
-          <Stack spacing={4}>
-              <Link component={RouterLink} to={`/${owner}/${repo}/}`}>{owner} / {repo}</Link>
-          </Stack>
+      <Stack spacing={4}>
+        <Link component={RouterLink} to={'/hpicgs/github-software-analytics-embedding/'}>hpicgs/github-software-analytics-embedding/</Link>
+        <Link component={RouterLink} to={'/Jasperhino/vscode/'}>Jasperhino/vscode</Link>
+        <Link component={RouterLink} to={'/Jasperhino/webgl-operate/'}>Jasperhino/webgl-operate</Link>
+      </Stack>
     </Container>
   )
 }
