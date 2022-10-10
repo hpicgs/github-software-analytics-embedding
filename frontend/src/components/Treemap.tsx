@@ -1,5 +1,6 @@
 import { configFromFileTree, createFileTree } from "@/utils/treemap_helpers";
 import { MetricsTableData } from "@analytics/types";
+import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   gloperate,
@@ -61,10 +62,8 @@ export default function Treemap({header, rows}: MetricsTableData) {
   }
 
   return (
-    <div>
-      <h1>Treemap</h1>
+    <Container fixed>
       <div id="labelContainer" className="label-overlay"></div>
-      <canvas id="canvasElement" width="800" height="400"></canvas>
-    </div>
-  );
+      <canvas id="canvasElement" width="1200" height="600"></canvas>
+    </Container>);
 }

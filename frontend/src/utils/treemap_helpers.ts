@@ -132,11 +132,11 @@ export function configFromFileTree(
   };
 
   config.labels = {
-    innerNodeLayerRange: [0, 2],
-    numTopInnerNodes: 4,
-    numTopWeightNodes: 4,
-    numTopHeightNodes: 4,
-    numTopColorNodes: 4,
+    innerNodeLayerRange: [0, 4],
+    numTopInnerNodes: 12,
+    numTopWeightNodes: 12,
+    numTopHeightNodes: 12,
+    numTopColorNodes: 12,
   };
 
   config.labels.callback = (

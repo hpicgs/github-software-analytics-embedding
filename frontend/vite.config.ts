@@ -17,7 +17,7 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["treemaps", "@analytics/types"],
+      include: ["treemaps"],
     },
     build: {
       rollupOptions: {

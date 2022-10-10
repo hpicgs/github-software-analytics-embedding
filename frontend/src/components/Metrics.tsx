@@ -3,8 +3,11 @@ import { parseMetrics } from "../utils/parse";
 import MetricsTable from "./MetricsTable";
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
 import { MetricsTableData } from "@analytics/types";
-import { Breadcrumbs, Divider, Stack, Typography } from "@mui/material";
+import { Breadcrumbs, LinearProgress, Stack, Typography, Box, Paper } from "@mui/material";
+import GitHubIcon from '@mui/icons-material/GitHub';
+
 import Treemap from "./Treemap";
+import MetaMetrics from "./MetaMetrics";
 
 type MetricsProps = {
   owner?: string;
@@ -58,20 +61,22 @@ export default function Metrics({
   }, []);
 
   return (
-    <div>
-      <h1>Metrics</h1>
+    <Paper elevation={2}>
       <Stack spacing={2}>
-        <div>
-          <Breadcrumbs separator="›" aria-label="breadcrumb">
-            {breadcrumbs}
-          </Breadcrumbs>
-          <Divider />
-        </div>
+        <Box m={2}>
+          <Stack direction="row" spacing={1}>
+            <GitHubIcon />
+            <Breadcrumbs separator="›" aria-label="breadcrumb">
+              {breadcrumbs}
+            </Breadcrumbs>
+          </Stack>
+        </Box>
+        {loading && <LinearProgress />}
         {error && <p>No metrics data found.</p>}
-        {loading && <p>Loading...</p>}
-        {data && <MetricsTable {...data} />}
         {data && <Treemap {...data} />}
+        {data && <MetaMetrics {...data} />}
+        {data && <MetricsTable {...data} />}
       </Stack>
-    </div>
+    </Paper>
   );
 }
