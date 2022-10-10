@@ -1,0 +1,14 @@
+lockfileVersion: 5.4
+
+specifiers:
+  pretty-bytes: ^6.0.0
+
+dependencies:
+  pretty-bytes: 6.0.0
+
+packages:
+
+  /pretty-bytes/6.0.0:
+    resolution: {integrity: sha512-6UqkYefdogmzqAZWzJ7laYeJnaXDy2/J+ZqiiMtS7t7OfpXWTlaeGMwX8U6EFvPV/YWWEKRkS8hKS4k60WHTOg==}
+    engines: {node: ^14.13.1 || >=16.0.0}
+    dev: false

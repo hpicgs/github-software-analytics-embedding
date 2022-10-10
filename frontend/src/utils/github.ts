@@ -1,6 +1,8 @@
 import { Octokit } from "octokit";
 import { Buffer } from "buffer";
 import { Endpoints, GetResponseTypeFromEndpointMethod } from "@octokit/types";
+import prettyBytes from "pretty-bytes";
+
 const octokit = new Octokit();
 
 export async function getCommitSHA(
@@ -16,13 +18,17 @@ export async function getCommitSHA(
 
   return ref.data.object.sha;
 }
+interface MetricsBlob {
+  content: string;
+  size: number;
+}
 
 export async function getMetricsBlob(
   owner: string,
   repo: string,
   commit_sha: string,
   files: string[] = ["metrics.csv"]
-): Promise<string[]> {
+): Promise<MetricsBlob[]> {
   const ref = await octokit.rest.git.getRef({
     owner,
     repo,
@@ -37,7 +43,7 @@ export async function getMetricsBlob(
   });
 
   response.data.tree.map((object) => {
-    console.log(object.path);
+    console.log(object.path, prettyBytes(object.size!));
   });
 
   return await Promise.all(
@@ -49,7 +55,7 @@ export async function getMetricsBlob(
       const file_sha = found_file?.sha;
       if (!file_sha) {
         console.warn(`${file} not found in tree object`);
-        return "";
+        return { content: "", size: 0 };
       }
 
       const blob = await octokit.rest.git.getBlob({
@@ -59,8 +65,12 @@ export async function getMetricsBlob(
       });
 
       const blob_string = Buffer.from(blob.data.content, "base64").toString();
+      if (!blob_string) {
+        console.warn(`${file} not found in blob object`);
+        return { content: "", size: 0 };
+      }
       console.log(blob_string);
-      return blob_string;
+      return { content: blob_string, size: blob.data.size } as MetricsBlob;
     })
   );
 }

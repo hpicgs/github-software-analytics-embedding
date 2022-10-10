@@ -23,6 +23,7 @@ export default function Metrics({
   branch,
 }: MetricsProps) {
   const [data, setData] = useState<MetricsTableData>();
+  const [size, setSize] = useState<number>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
@@ -46,10 +47,11 @@ export default function Metrics({
         commitSHA = await getCommitSHA(owner, repo, branch);
       }
       try {
-        const [csv] = await getMetricsBlob(owner, repo, commitSHA);
-        const parsedData = parseMetrics(csv);
+        const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA);
+        const parsedData = parseMetrics(metricsBlob.content);
         console.log("parsedData:", parsedData);
         setData(parsedData);
+        setSize(metricsBlob.size);
       } catch (e) {
         console.error(e);
         setError(true)
@@ -74,7 +76,7 @@ export default function Metrics({
         {loading && <LinearProgress />}
         {error && <p>No metrics data found.</p>}
         {data && <Treemap {...data} />}
-        {data && <MetaMetrics {...data} />}
+        {data && size && <MetaMetrics size={size} {...data} />}
         {data && <MetricsTable {...data} />}
       </Stack>
     </Paper>
