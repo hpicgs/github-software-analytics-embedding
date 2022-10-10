@@ -55,7 +55,7 @@ jobs:
         run: |
           cd frontend
           pnpm install
-          pnpm run build
+          pnpm run build:pages
 
       - name: Deploy Frontend 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
