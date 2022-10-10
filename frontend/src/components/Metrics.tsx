@@ -3,12 +3,13 @@ import { parseMetrics } from "../utils/parse";
 import MetricsTable from "./MetricsTable";
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
 import { MetricsTableData } from "@analytics/types";
-import { Breadcrumbs, LinearProgress, Stack, Typography, Box, Paper, Link } from "@mui/material";
-import GitHubIcon from '@mui/icons-material/GitHub';
+import { LinearProgress, Stack, Typography, Box, Paper, Link } from "@mui/material";
 
 import Treemap from "./Treemap";
 import MetaMetrics from "./MetaMetrics";
 import { Link as RouterLink } from "react-router-dom";
+import NoMetrics from "./NoMetrics";
+import RepoBreadcrumbs from "./RepoBreadcrumbs";
 
 type MetricsProps = {
   owner?: string;
@@ -66,18 +67,9 @@ export default function Metrics({
   return (
     <Paper elevation={2}>
       <Stack spacing={2}>
-        <Box m={2}>
-          <Stack direction="row" spacing={1}>
-            <RouterLink to={"/"}>
-              <GitHubIcon />
-            </RouterLink>
-            <Breadcrumbs separator="›" aria-label="breadcrumb">
-              {breadcrumbs}
-            </Breadcrumbs>
-          </Stack>
-        </Box>
+        <RepoBreadcrumbs breadcrumbs={breadcrumbs} />
         {loading && <LinearProgress />}
-        {error && <p>No metrics data found.</p>}
+        {error && <NoMetrics />}
         {data && <Treemap {...data} />}
         {data && size && <MetaMetrics size={size} {...data} />}
         {data && <MetricsTable {...data} />}

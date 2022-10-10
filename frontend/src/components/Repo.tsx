@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Paper, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material'
+import { Container, Paper, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Breadcrumbs, Typography} from '@mui/material'
 import { Link as RouterLink, useParams } from 'react-router-dom'
 import { getBranches, getMetricCommits, ListRefsResponseType, ListBranchesResponseType } from '@/utils/github'
+import RepoBreadcrumbs from './RepoBreadcrumbs'
 
 interface RepoParams {
   owner: string
@@ -24,9 +25,18 @@ export default function Repo({owner, repo}: RepoParams) {
     fetchData()
   }, [])
 
+  const breadcrumbs = [
+    <Typography key="1" color="text.secondary">
+      {owner}
+    </Typography>,
+    <Typography key="2" color="text.secondary">
+      <Link component={RouterLink} to={`/${owner}/${repo}/`}>{repo}</Link>
+    </Typography>
+  ];
+
   return (
     <Container>
-      <h1>Metrics Dashboard</h1>
+      <RepoBreadcrumbs breadcrumbs={breadcrumbs} />
       <Stack spacing={4}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
