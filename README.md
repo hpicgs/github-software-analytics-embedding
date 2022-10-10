@@ -1,7 +1,14 @@
 # github-software-analytics-embedding
 Seminar Project of the Seminar "Advanced Techniques for Analysis and Visualization of Software Data" of CGS, HPI and DEF in the Summer Term 2022
 
-# Usage
+![image](https://user-images.githubusercontent.com/33397387/194839012-0c3efa5c-29cf-41b3-a686-1e9fd310c1a2.png)
+This repo contains a dockerized github action to calculate typescript software metrics per commit and store them as a `.csv` file directly to the git repository under the custom ref `refs/metrics`.
+It also provides a React Frontend to visualize the calculated metrics in a treemap.
+The viewer can also be embedded into an existing webpage.
+
+Please note that this is a research prototype and not meant for use in production as of now.
+
+# Integration into your Github project
 Create a new GitHub Actions workflow in your project, e.g. at `.github/workflows/analytics-embedding.yml`. The content of the file should be in the following format:
 ```yaml
 name: Analytics Treemap Embedding
@@ -34,7 +41,6 @@ jobs:
           # Optional to enable benchmarking
           benchmark: true
 ```
-
 ## Development
 
 Install `pnpm`:
