@@ -40,9 +40,10 @@ export function createFileTree(rows: FileMetrics[]): TreeNode {
 export function configFromFileTree(
   fileTreeRoot: TreeNode,
   valueMapping: ValueMapping = {
+    //Todo: change to include one functions and one comment metric
     weights: "loc",
-    heights: "loc",
-    colors: "loc",
+    heights: "nof",
+    colors: "dc",
   }
 ): Configuration {
   const config = new Configuration();
@@ -133,10 +134,10 @@ export function configFromFileTree(
 
   config.labels = {
     innerNodeLayerRange: [0, 4],
-    numTopInnerNodes: 12,
-    numTopWeightNodes: 12,
-    numTopHeightNodes: 12,
-    numTopColorNodes: 12,
+    numTopInnerNodes: 6,
+    numTopWeightNodes: 6,
+    numTopHeightNodes: 6,
+    numTopColorNodes: 6,
   };
 
   config.labels.callback = (

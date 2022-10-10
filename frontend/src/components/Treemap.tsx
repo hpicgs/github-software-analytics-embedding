@@ -64,6 +64,6 @@ export default function Treemap({header, rows}: MetricsTableData) {
   return (
     <Container fixed>
       <div id="labelContainer" className="label-overlay"></div>
-      <canvas id="canvasElement" width="1200" height="600"></canvas>
+      <canvas id="canvasElement" width="1400" height="700"></canvas>
     </Container>);
 }

@@ -3,11 +3,12 @@ import { parseMetrics } from "../utils/parse";
 import MetricsTable from "./MetricsTable";
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
 import { MetricsTableData } from "@analytics/types";
-import { Breadcrumbs, LinearProgress, Stack, Typography, Box, Paper } from "@mui/material";
+import { Breadcrumbs, LinearProgress, Stack, Typography, Box, Paper, Link } from "@mui/material";
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 import Treemap from "./Treemap";
 import MetaMetrics from "./MetaMetrics";
+import { Link as RouterLink } from "react-router-dom";
 
 type MetricsProps = {
   owner?: string;
@@ -32,7 +33,7 @@ export default function Metrics({
       {owner}
     </Typography>,
     <Typography key="2" color="text.secondary">
-      {repo}
+      <Link component={RouterLink} to={`/${owner}/${repo}/`}>{repo}</Link>
     </Typography>,
     <Typography key="3" color="text.primary">
       {branch ? branch : commitSHA}
@@ -67,7 +68,9 @@ export default function Metrics({
       <Stack spacing={2}>
         <Box m={2}>
           <Stack direction="row" spacing={1}>
-            <GitHubIcon />
+            <RouterLink to={"/"}>
+              <GitHubIcon />
+            </RouterLink>
             <Breadcrumbs separator="›" aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
