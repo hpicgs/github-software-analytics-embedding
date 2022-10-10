@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container, Paper, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Breadcrumbs, Typography} from '@mui/material'
 import { Link as RouterLink, useParams } from 'react-router-dom'
 import { getBranches, getMetricCommits, ListRefsResponseType, ListBranchesResponseType } from '@/utils/github'

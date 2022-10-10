@@ -1,4 +1,3 @@
-import React from 'react'
 import { Stack, Container, Typography } from '@mui/material'
 
 export default function NoMetrics() {

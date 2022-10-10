@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
-import { Container } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import MetricsPage from "./components/MetricsPage";
 import RepoPage from "./components/RepoPage";
 import Home from "./components/Home";
