@@ -13,6 +13,12 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
+      - name: Bump version and push tag 🏷
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+
       - name: Install pnpm ⚙
         uses: pnpm/action-setup@v2.2.2
         with:
