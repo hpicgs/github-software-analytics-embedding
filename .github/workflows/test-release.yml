@@ -18,13 +18,21 @@ jobs:
         with:
           version: 7
 
+      - name: Install treemaps library 📦
+        run: |
+          cd frontend
+          git clone --branch hiviser_deployment https://${{ secrets.SEERENE_TREEMAPS_DEPLOY_USER }}:${{ secrets.SEERENE_TREEMAPS_DEPLOY_TOKEN }}@gitlab.hpi3d.de/seerene/treemaps.git
+          cd treemaps
+          npm install
+          npm run build-lib
+
       - name: Build Embedding 🛠
         run: |
           cd frontend
           pnpm install
           pnpm run build:embed
 
-      - name: Pubish Release 📦
+      - name: Pubish Release 🚀
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
