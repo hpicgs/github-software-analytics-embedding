@@ -15,11 +15,11 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["treemaps", "react", "react-dom"],
+      include: ["treemap"],
     },
     build: {
-      rollupOptions: {
-        external: ["treemaps"],
+      commonjsOptions: {
+        include: [/treemap/, /node_modules/],
       },
     },
   };
