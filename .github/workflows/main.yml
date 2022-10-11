@@ -1,4 +1,4 @@
-name: Deploy HiViSer GitHub Pages
+name: Deploy Viewer to GitHub Pages
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
           WITH_V: true
 
   deploy:
-    name: Deploy HiViSer Frontend to GitHub Pages 🚀
+    name: Deploy Frontend to GitHub Pages 🚀
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +55,7 @@ jobs:
         run: |
           cd frontend
           pnpm install
-          pnpm run build
+          pnpm run build:pages
 
       - name: Deploy Frontend 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3

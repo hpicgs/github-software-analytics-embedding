@@ -6,10 +6,8 @@ import App from "./App";
 
 const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);
-const basename = import.meta.env.VITE_BASE_NAME ? import.meta.env.VITE_BASE_NAME : "/";
-
 root.render(
-  <BrowserRouter basename={basename}>
+  <BrowserRouter basename={import.meta.env.BASE_URL}>
     <App />
   </BrowserRouter>
 );

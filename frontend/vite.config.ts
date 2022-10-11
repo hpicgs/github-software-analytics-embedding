@@ -5,11 +5,9 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(({ command, mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd(), "") };
-  const base = process.env.VITE_BASE_NAME
-    ? `/${process.env.VITE_BASE_NAME}/`
-    : "/";
+  const base = "/github-software-analytics-embedding/";
+  //console.log(`Building for ${mode} with base URL ${base}`);
   const config: UserConfig = {
-    base,
     plugins: [react(), tsconfigPaths()],
     resolve: {
       alias: {
@@ -17,11 +15,11 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["treemaps", "@analytics/types"],
+      include: ["treemaps", "react", "react-dom"],
     },
     build: {
       rollupOptions: {
-        external: ["react", "treemaps"],
+        external: ["treemaps"],
       },
     },
   };

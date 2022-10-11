@@ -1,7 +1,15 @@
 # github-software-analytics-embedding
 Seminar Project of the Seminar "Advanced Techniques for Analysis and Visualization of Software Data" of CGS, HPI and DEF in the Summer Term 2022
 
-# Usage
+![image](https://user-images.githubusercontent.com/33397387/194839012-0c3efa5c-29cf-41b3-a686-1e9fd310c1a2.png)
+This project contains:
+- a dockerized github action to calculate typescript software metrics per commit and store them as a `.csv` file directly to the git repository under the custom ref `refs/metrics`.
+- a React frontend to visualize the calculated metrics in a treemap.
+- an embedding script to integrate the viewer into an existing webpage.
+
+⚠️ Please note that this is a research prototype and not meant for use in production as of now.
+
+# Integration into your Github project
 Create a new GitHub Actions workflow in your project, e.g. at `.github/workflows/analytics-embedding.yml`. The content of the file should be in the following format:
 ```yaml
 name: Analytics Treemap Embedding
@@ -26,15 +34,14 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v3
 
-      - name: Run Hiviser Action
-        uses: hpicgs/hiviser-action@v0
+      - name: Run Analytics Treemap Embedding Action 🚀
+        uses: hpicgs/github-software-analytics-embedding@v0
         with:
           # Optional, use if you want to analyse a specific folder
           repository_path: ./
           # Optional to enable benchmarking
           benchmark: true
 ```
-
 ## Development
 
 Install `pnpm`:
@@ -52,7 +59,8 @@ pnpm i
 pnpm run dev
 ```
 
-Navigate to e.g. `localhost:3000/hpicgs/github-software-analytics-embedding/5b337b8409f2a2d3b1b14f85d52a97a0258fe256`
+Navigate to `localhost:3000` in the browser of your choice.
+
 ### Setup Code Anayltics Development locally
 Create an .env file
 ```

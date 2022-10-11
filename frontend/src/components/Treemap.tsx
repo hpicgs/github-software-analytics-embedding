@@ -1,5 +1,6 @@
 import { configFromFileTree, createFileTree } from "@/utils/treemap_helpers";
 import { MetricsTableData } from "@analytics/types";
+import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   gloperate,
@@ -19,9 +20,8 @@ export default function Treemap({header, rows}: MetricsTableData) {
   let canvas: gloperate.Canvas | undefined = undefined;
   useEffect(() => {
     // This is a workaround to get the Treemap library to look for the font files in the right place
-    const base = import.meta.env.VITE_BASEN_NAME ? `/${import.meta.env.VITE_BASEN_NAME}` : "";
     (window as any).SeereneConstants = {
-      "STATIC_DIRECTORY": `${base}/assets`
+      "STATIC_DIRECTORY": `${import.meta.env.BASE_URL}assets`
     }
     canvas = initialize("canvasElement");
     canvas.renderer = visualization.renderer as Renderer;
@@ -61,10 +61,8 @@ export default function Treemap({header, rows}: MetricsTableData) {
   }
 
   return (
-    <div>
-      <h1>Treemap</h1>
+    <Container fixed>
       <div id="labelContainer" className="label-overlay"></div>
-      <canvas id="canvasElement" width="800" height="400"></canvas>
-    </div>
-  );
+      <canvas id="canvasElement" width="1400" height="700"></canvas>
+    </Container>);
 }
