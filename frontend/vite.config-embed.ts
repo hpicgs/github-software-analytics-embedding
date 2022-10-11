@@ -15,9 +15,8 @@ export default defineConfig(({ command, mode }) => {
     build: {
       lib: {
         entry: resolve(__dirname, "src/embed/main.tsx"),
-        name: "analytics-treemap-embed",
-        // the proper extensions will be added
-        fileName: "analytics-treemap-embed",
+        name: "embed",
+        fileName: "embed",
       },
       commonjsOptions: {
         include: [/treemap/, /node_modules/],
