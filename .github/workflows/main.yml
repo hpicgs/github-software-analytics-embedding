@@ -9,18 +9,47 @@ permissions:
   contents: write
 
 jobs:
-  bump-version:
-    name: Bump tag version ⬆
+  release:
+    name: Automatic Release
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout 🛎️
-        uses: "actions/checkout@v3"
+        uses: actions/checkout@v3
+
       - name: Bump version and push tag 🏷
+        id: tag
         uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
+
+      - name: Install pnpm ⚙
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+
+      - name: Install treemaps library 📦
+        run: |
+          cd frontend
+          git clone --branch hiviser_deployment https://${{ secrets.SEERENE_TREEMAPS_DEPLOY_USER }}:${{ secrets.SEERENE_TREEMAPS_DEPLOY_TOKEN }}@gitlab.hpi3d.de/seerene/treemaps.git
+          cd treemaps
+          npm install
+          npm run build-lib
+
+      - name: Build Embedding 🛠
+        run: |
+          cd frontend
+          pnpm install
+          pnpm run build:embed
+
+      - name: Pubish Release 🚀
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.new_tag }}
+          files: |
+            frontend/embed/embed.es.js
+            frontend/embed/embed.umd.js
 
   deploy:
     name: Deploy Frontend to GitHub Pages 🚀
@@ -51,7 +80,7 @@ jobs:
           npm install
           npm run build-lib
 
-      - name: Install and Build 🔧
+      - name: Install and Build Pages 🔧
         run: |
           cd frontend
           pnpm install

@@ -3,13 +3,11 @@ import { parseMetrics } from "../utils/parse";
 import MetricsTable from "./MetricsTable";
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
 import { MetricsTableData } from "@analytics/types";
-import { LinearProgress, Stack, Typography, Box, Paper, Link } from "@mui/material";
+import { LinearProgress, Stack, Typography, Paper } from "@mui/material";
 
 import Treemap from "./Treemap";
 import MetaMetrics from "./MetaMetrics";
-import { Link as RouterLink } from "react-router-dom";
 import NoMetrics from "./NoMetrics";
-import RepoBreadcrumbs from "./RepoBreadcrumbs";
 
 type MetricsProps = {
   owner?: string;
@@ -29,18 +27,6 @@ export default function Metrics({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
-  const breadcrumbs = [
-    <Typography key="1" color="text.secondary">
-      {owner}
-    </Typography>,
-    <Typography key="2" color="text.secondary">
-      <Link component={RouterLink} to={`/${owner}/${repo}/`}>{repo}</Link>
-    </Typography>,
-    <Typography key="3" color="text.primary">
-      {branch ? branch : commitSHA}
-    </Typography>,
-  ];
-
   useEffect(() => {
     async function fetchData() {
       if (!owner || !repo) return;
@@ -56,7 +42,7 @@ export default function Metrics({
         setSize(metricsBlob.size);
       } catch (e) {
         console.error(e);
-        setError(true)
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -65,15 +51,12 @@ export default function Metrics({
   }, []);
 
   return (
-    <Paper elevation={2}>
-      <Stack spacing={2}>
-        <RepoBreadcrumbs breadcrumbs={breadcrumbs} />
-        {loading && <LinearProgress />}
-        {error && <NoMetrics />}
-        {data && <Treemap {...data} />}
-        {data && size && <MetaMetrics size={size} {...data} />}
-        {data && <MetricsTable {...data} />}
-      </Stack>
-    </Paper>
+    <Stack spacing={2}>
+      {loading && <LinearProgress />}
+      {error && <NoMetrics />}
+      {data && <Treemap {...data} />}
+      {data && size && <MetaMetrics size={size} {...data} />}
+      {data && <MetricsTable {...data} />}
+    </Stack>
   );
 }

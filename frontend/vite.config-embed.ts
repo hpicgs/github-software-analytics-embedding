@@ -12,12 +12,20 @@ export default defineConfig(({ command, mode }) => {
         "node-fetch": "isomorphic-fetch", // This is a workarround for https://github.com/octokit/octokit.js/issues/2126
       },
     },
+    optimizeDeps: {
+      include: ["treemap"],
+    },
     build: {
+      emptyOutDir: true,
+      outDir: resolve(__dirname, "embed"),
+      sourcemap: true,
       lib: {
         entry: resolve(__dirname, "src/embed/main.tsx"),
-        name: "Embed",
-        // the proper extensions will be added
+        name: "embed",
         fileName: "embed",
+      },
+      commonjsOptions: {
+        include: [/treemap/, /node_modules/],
       },
     },
   };

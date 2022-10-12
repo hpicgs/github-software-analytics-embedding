@@ -1,5 +1,5 @@
 import { FileMetrics, Metrics, TreeNode } from "@analytics/types";
-import { Configuration, NodeSort, Visualization } from "treemaps";
+import { Configuration, NodeSort, Visualization } from "treemap";
 
 interface ValueMapping {
   weights: keyof Metrics;
