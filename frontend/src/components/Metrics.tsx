@@ -7,9 +7,7 @@ import { LinearProgress, Stack, Typography, Paper } from "@mui/material";
 
 import Treemap from "./Treemap";
 import MetaMetrics from "./MetaMetrics";
-import { Link } from "react-router-dom";
 import NoMetrics from "./NoMetrics";
-import RepoBreadcrumbs from "./RepoBreadcrumbs";
 
 type MetricsProps = {
   owner?: string;
@@ -28,18 +26,6 @@ export default function Metrics({
   const [size, setSize] = useState<number>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-
-  const breadcrumbs = [
-    <Typography key="1" color="text.secondary">
-      {owner}
-    </Typography>,
-    <Typography key="2" color="text.secondary">
-      <Link to={`/${owner}/${repo}/`}>{repo}</Link>
-    </Typography>,
-    <Typography key="3" color="text.primary">
-      {branch ? branch : commitSHA}
-    </Typography>,
-  ];
 
   useEffect(() => {
     async function fetchData() {
@@ -65,15 +51,12 @@ export default function Metrics({
   }, []);
 
   return (
-    <Paper elevation={2}>
-      <Stack spacing={2}>
-        <RepoBreadcrumbs breadcrumbs={breadcrumbs} />
-        {loading && <LinearProgress />}
-        {error && <NoMetrics />}
-        {data && <Treemap {...data} />}
-        {data && size && <MetaMetrics size={size} {...data} />}
-        {data && <MetricsTable {...data} />}
-      </Stack>
-    </Paper>
+    <Stack spacing={2}>
+      {loading && <LinearProgress />}
+      {error && <NoMetrics />}
+      {data && <Treemap {...data} />}
+      {data && size && <MetaMetrics size={size} {...data} />}
+      {data && <MetricsTable {...data} />}
+    </Stack>
   );
 }

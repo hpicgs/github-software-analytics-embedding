@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Container,
   Paper,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -9,7 +10,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Breadcrumbs,
   Typography,
 } from "@mui/material";
 import {
@@ -19,7 +19,7 @@ import {
   ListBranchesResponseType,
 } from "@/utils/github";
 import RepoBreadcrumbs from "./RepoBreadcrumbs";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 interface RepoParams {
   owner: string;
@@ -47,7 +47,9 @@ export default function Repo({ owner, repo }: RepoParams) {
       {owner}
     </Typography>,
     <Typography key="2" color="text.secondary">
-      <Link to={`/${owner}/${repo}/`}>{repo}</Link>
+      <Link component={RouterLink} to={`/${owner}/${repo}/`}>
+        {repo}
+      </Link>
     </Typography>,
   ];
 
@@ -70,7 +72,10 @@ export default function Repo({ owner, repo }: RepoParams) {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      <Link href={`/${owner}/${repo}/branches/${branch.name}`}>
+                      <Link
+                        component={RouterLink}
+                        to={`/${owner}/${repo}/branches/${branch.name}`}
+                      >
                         {branch.name}
                       </Link>
                     </TableCell>
@@ -95,8 +100,8 @@ export default function Repo({ owner, repo }: RepoParams) {
                   >
                     <TableCell component="th" scope="row">
                       <Link
-                        underline="hover"
-                        href={`/${owner}/${repo}/${ref.ref.split("/").pop()}`}
+                        component={RouterLink}
+                        to={`/${owner}/${repo}/${ref.ref.split("/").pop()}`}
                       >
                         {ref.ref}
                       </Link>

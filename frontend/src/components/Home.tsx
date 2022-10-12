@@ -1,5 +1,5 @@
-import { Container, Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Container, Stack, Typography, Link } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function Home() {
   const owner = "hpicgs";
@@ -10,11 +10,18 @@ export default function Home() {
         Treemap Metrics Viewer
       </Typography>
       <Stack spacing={2}>
-        <Link to="/hpicgs/github-software-analytics-embedding/">
+        <Link
+          component={RouterLink}
+          to="/hpicgs/github-software-analytics-embedding/"
+        >
           hpicgs/github-software-analytics-embedding/
         </Link>
-        <Link to="/Jasperhino/vscode/">Jasperhino/vscode</Link>
-        <Link to="/Jasperhino/webgl-operate/">Jasperhino/webgl-operate</Link>
+        <Link component={RouterLink} to="/Jasperhino/vscode/">
+          Jasperhino/vscode
+        </Link>
+        <Link component={RouterLink} to="/Jasperhino/webgl-operate/">
+          Jasperhino/webgl-operate
+        </Link>
       </Stack>
     </Container>
   );
