@@ -13,6 +13,8 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     build: {
+      emptyOutDir: true,
+      outDir: resolve(__dirname, "embed"),
       lib: {
         entry: resolve(__dirname, "src/embed/main.tsx"),
         name: "embed",
