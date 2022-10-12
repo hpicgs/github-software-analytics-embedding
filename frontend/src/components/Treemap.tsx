@@ -63,9 +63,17 @@ export default function Treemap({ header, rows }: MetricsTableData) {
   }
 
   return (
-    <Container fixed>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+        width: "100%",
+      }}
+    >
       <div id="labelContainer" className="label-overlay"></div>
       <canvas id="canvasElement" width="1400" height="700"></canvas>
-    </Container>
+    </div>
   );
 }
