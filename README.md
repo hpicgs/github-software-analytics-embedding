@@ -29,6 +29,7 @@ jobs:
   analytics-embedding:
     name: Run Analytics Treemap Embedding 🔎
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
       - name: Check out Git repository
