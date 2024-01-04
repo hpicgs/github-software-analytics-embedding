@@ -26,7 +26,10 @@ export default function Treemap({ header, rows }: MetricsTableData) {
     (window as any).SeereneConstants = {
       STATIC_DIRECTORY: `${import.meta.env.BASE_URL}assets`,
     };
-    canvas = initialize("canvasElement");
+    const html_canvas = document.getElementById("canvasElement") as HTMLCanvasElement;
+    canvas = initialize(html_canvas);
+    canvas.dispose();
+    // canvas.frameScale = [ 1.0, 1.0 ];
     canvas.renderer = visualization.renderer as Renderer;
     console.log("cfg:", config);
     loadConfig();
@@ -62,8 +65,8 @@ export default function Treemap({ header, rows }: MetricsTableData) {
     (window as any)["renderer"] = visualization.renderer;
   }
 
-  const width = 1440;
-  const height = 720;
+  const width = 1440 / window.devicePixelRatio;
+  const height = 720 / window.devicePixelRatio;
 
   return (
     <div
