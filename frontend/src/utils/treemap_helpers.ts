@@ -120,7 +120,7 @@ export function configFromFileTree(
   };
 
   config.geometry = {
-    parentLayer: { showRoot: true },
+    parentLayer: { showRoot: false },
     leafLayers: [
       {
         colorMap: "color:leaf",

@@ -62,6 +62,9 @@ export default function Treemap({ header, rows }: MetricsTableData) {
     (window as any)["renderer"] = visualization.renderer;
   }
 
+  const width = 1440;
+  const height = 720;
+
   return (
     <div
       style={{
@@ -72,8 +75,7 @@ export default function Treemap({ header, rows }: MetricsTableData) {
         width: "100%",
       }}
     >
-      <div id="labelContainer" className="label-overlay"></div>
-      <canvas id="canvasElement" width="1400" height="700"></canvas>
+      <canvas id="canvasElement" width={width} height={height}></canvas>
     </div>
   );
 }
