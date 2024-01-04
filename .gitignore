@@ -205,3 +205,5 @@ metrics.csv
 
 frontend/embed/*
 !frontend/embed/embed.*.js
+
+analytics/build/*

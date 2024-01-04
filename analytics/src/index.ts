@@ -9,8 +9,13 @@ import { performance } from "perf_hooks";
 const globPromise = promisify(glob);
 
 async function analyseRepository(benchmark = false) {
-  if (!process.env.REPOSITORY_PATH)
-    throw new Error("REPOSITORY_PATH environment variable is not set");
+  if (!process.env.REPOSITORY_PATH) {
+    if (process.env.DEBUG) {
+      console.log("DEBUG mode enabled, skipping GitHub API calls");
+    } else {
+      throw new Error("REPOSITORY_PATH environment variable is not set");
+    }
+  }
   console.log(`REPOSITORY_PATH="${process.env.REPOSITORY_PATH}"`);
   const files = await globPromise(`${process.env.REPOSITORY_PATH}/**/*.ts`);
 
