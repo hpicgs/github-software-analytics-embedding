@@ -1,28 +1,28 @@
-import { Octokit } from "octokit";
-import { createActionAuth } from "@octokit/auth-action";
 import "dotenv/config";
 
-if (!process.env.GITHUB_REPOSITORY)
-  throw new Error("GITHUB_REPOSITORY environment variable is not set");
+import { Octokit } from "octokit";
+import { createActionAuth } from "@octokit/auth-action";
 
-const repo_path = process.env.GITHUB_REPOSITORY;
-const [owner, repo] = repo_path.split("/");
-const commit_sha = process.env.GITHUB_SHA || "default_tag";
+function obtainOctokit() {
+  let octokit: Octokit;
+  if (process.env.GITHUB_ACTIONS) {
+    console.log("Running in GitHub Actions, using @octokit/auth-action");
+    octokit = new Octokit({ authStrategy: createActionAuth });
+  } else {
+    if (!process.env.GITHUB_TOKEN)
+      throw new Error(
+        "GITHUB_TOKEN environment variable is not set. This needs to be set if you want to run this script outside of GitHub Actions"
+      );
+    octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  }
 
-let octokit: Octokit;
-if (process.env.GITHUB_ACTIONS) {
-  console.log("Running in GitHub Actions, using @octokit/auth-action");
-  octokit = new Octokit({ authStrategy: createActionAuth });
-} else {
-  if (!process.env.GITHUB_TOKEN)
-    throw new Error(
-      "GITHUB_TOKEN environment variable is not set. This needs to be set if you want to run this script outside of GitHub Actions"
-    );
-  octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  return octokit;
 }
 
-async function createTag(tag: string, message: string, object_sha: string) {
+async function createTag(tag: string, message: string, object_sha: string, owner: string, repo: string) {
   console.log(`creating tag ${tag} - "${message}"`);
+
+  const octokit = obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/tags`,
@@ -39,8 +39,10 @@ async function createTag(tag: string, message: string, object_sha: string) {
   console.log(response);
 }
 
-async function createRef(ref: string, sha: string) {
+async function createRef(ref: string, sha: string, owner: string, repo: string) {
   console.log(`creating ref ${ref} for metrics tree ${sha}`);
+
+  const octokit = obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/refs`,
@@ -55,8 +57,10 @@ async function createRef(ref: string, sha: string) {
   console.log(response);
 }
 
-async function createBlob(content: string) {
+async function createBlob(content: string, owner: string, repo: string) {
   console.log(`creating blob with content: ${content.substring(0, 10)} ...`);
+
+  const octokit = obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/blobs`,
@@ -71,8 +75,10 @@ async function createBlob(content: string) {
   console.log(response);
 }
 
-async function createTree(csv: string): Promise<string> {
+async function createTree(csv: string, owner: string, repo: string): Promise<string> {
   console.log(`creating tree at ${owner}/${repo}`);
+
+  const octokit = obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/trees`,
@@ -94,12 +100,12 @@ async function createTree(csv: string): Promise<string> {
   return response.data.sha;
 }
 
-export async function storeMetricsToRepo(metrics_csv: string) {
+export async function storeMetricsToRepo(metrics_csv: string, commit_sha: string, owner: string, repo: string) {
   if (process.env.DEBUG) {
     console.log("DEBUG mode enabled, skipping GitHub API calls");
     return;
   }
 
-  const tree_sha = await createTree(metrics_csv);
-  await createRef(`refs/metrics/${commit_sha}`, tree_sha);
+  const tree_sha = await createTree(metrics_csv, owner, repo);
+  await createRef(`refs/metrics/${commit_sha}`, tree_sha, owner, repo);
 }
