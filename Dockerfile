@@ -10,6 +10,9 @@ COPY analytics/src ./src
 COPY analytics/package.json .
 COPY analytics/pnpm-lock.yaml .
 COPY analytics/tsconfig.json .
+RUN mkdir /metrics
+VOLUME ["/metrics"]
+
 
 RUN pnpm install
 RUN pnpm run build
