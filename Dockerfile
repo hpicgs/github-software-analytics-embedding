@@ -1,5 +1,4 @@
 FROM node:16
-#FROM rust:latest
 
 RUN npm install pnpm --location=global
 
@@ -17,7 +16,6 @@ RUN pnpm run build
 
 RUN curl -vL --compressed https://github.com/XAMPPRocky/tokei/releases/download/v12.1.2/tokei-x86_64-unknown-linux-gnu.tar.gz --output tokei.tar.gz
 RUN tar -xvf tokei.tar.gz
-#RUN cargo install tokei
-RUN ./tokei /repository --output json > metrics.json
+RUN ./tokei /repository --output json > /metrics/metrics.json
 
 CMD [ "node", "/build/index.js" ]

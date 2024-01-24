@@ -4,7 +4,6 @@ import MetricsTable from "./MetricsTable";
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
 import { MetricsTableData } from "@analytics/types";
 import { LinearProgress, Stack, Typography, Paper } from "@mui/material";
-import metrics from "../metrics.json"
 import Treemap from "./Treemap";
 import MetaMetrics from "./MetaMetrics";
 import NoMetrics from "./NoMetrics";
@@ -62,7 +61,7 @@ export default function Metrics({
       {loading && <LinearProgress />}
       {error && <NoMetrics />}
       {data && <Treemap {...data} />}
-      {/* {data && size && <MetaMetrics size={size} {...data} />} */}
+      {data && size && <MetaMetrics size={size} {...data} />}
       {data && <MetricsDataGrid {...data} />}
     </Stack>
   );
