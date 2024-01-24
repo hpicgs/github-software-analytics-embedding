@@ -1,13 +1,13 @@
-import { FileMetrics, Metrics, TreeNode } from "@analytics/types";
+import { TokeiMetrics, Metrics, TreeNode } from "@analytics/types";
 import { Configuration, NodeSort, Visualization } from "treemap";
 
 interface ValueMapping {
-  weights: keyof Metrics;
-  heights: keyof Metrics;
-  colors: keyof Metrics;
+  weights: keyof TokeiMetrics;
+  heights: keyof TokeiMetrics;
+  colors: keyof TokeiMetrics;
 }
 
-export function createFileTree(rows: FileMetrics[]): TreeNode {
+export function createFileTree(rows: TokeiMetrics[]): TreeNode {
   const rootNode = {
     name: "/",
     children: [],
@@ -40,10 +40,9 @@ export function createFileTree(rows: FileMetrics[]): TreeNode {
 export function configFromFileTree(
   fileTreeRoot: TreeNode,
   valueMapping: ValueMapping = {
-    //Todo: change to include one functions and one comment metric
-    weights: "loc",
-    heights: "nof",
-    colors: "dc",
+    weights: "lines",
+    heights: "code",
+    colors: "comments",
   }
 ): Configuration {
   const config = new Configuration();

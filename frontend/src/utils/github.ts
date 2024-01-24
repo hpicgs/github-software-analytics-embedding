@@ -29,10 +29,12 @@ export async function getMetricsBlob(
   commit_sha: string,
   files: string[] = ["metrics.csv"]
 ): Promise<MetricsBlob[]> {
+  const ref_string = `metrics/${commit_sha}`;
+  console.log(ref_string);
   const ref = await octokit.rest.git.getRef({
     owner,
     repo,
-    ref: `metrics/${commit_sha}`,
+    ref: ref_string,
   });
 
   const tree_sha = ref.data.object.sha;

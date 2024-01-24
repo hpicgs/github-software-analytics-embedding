@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MetricsTableData, Metrics } from '@analytics/types';
+import { MetricsTableData, TokeiMetrics } from '@analytics/types';
 import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 
@@ -22,7 +22,7 @@ export default function MetricsTable({header, rows}: MetricsTableData) {
             >
             {header.map((key) => (
               <TableCell component="th" scope="row" key={key + row.filename}>
-                {row[key as keyof Metrics]}
+                {row[key as keyof TokeiMetrics]}
               </TableCell>
             ))}
             </TableRow>

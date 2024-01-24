@@ -9,9 +9,18 @@ export interface Metrics {
   dc: number;
   nof: number;
 }
+
+export interface TokeiMetrics {
+  filename: string;
+  blanks: number;
+  code: number;
+  comments: number;
+  lines: number;
+}
+
 export interface MetricsTableData {
   header: string[];
-  rows: FileMetrics[];
+  rows: TokeiMetrics[];
 }
 
 export interface FileTree {
@@ -21,5 +30,5 @@ export interface FileTree {
 export interface TreeNode {
   name: string;
   children: TreeNode[];
-  metrics?: Metrics;
+  metrics?: TokeiMetrics;
 }
