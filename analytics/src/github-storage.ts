@@ -19,7 +19,7 @@ export async function storeInGitHub(file: string, benchmark = false) {
   const commit_sha = process.env.GITHUB_SHA || "default_tag";
 
   if (benchmark) console.time("storing-in-github");
-  const csv = readFileSync(file, 'utf8');
-  await storeMetricsToRepo(csv, commit_sha, owner, repo);
+  const metrics = readFileSync(file, 'utf8');
+  await storeMetricsToRepo(metrics, commit_sha, owner, repo);
   if (benchmark) console.timeEnd("storing-in-github");
 }
