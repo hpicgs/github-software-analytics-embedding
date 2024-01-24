@@ -30,19 +30,19 @@ export default function Metrics({
 
   useEffect(() => {
     async function fetchData() {
-      // if (!owner || !repo) return;
-      // if (!commitSHA) {
-      //   if (!branch) return;
-      //   commitSHA = await getCommitSHA(owner, repo, branch);
-      //   console.log(commitSHA);
-      // }
+      if (!owner || !repo) return;
+      if (!commitSHA) {
+        if (!branch) return;
+        commitSHA = await getCommitSHA(owner, repo, branch);
+        console.log(commitSHA);
+      }
       try {
-        //const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA, ["metrics.json"]);
+        const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA, ["metrics.json"]);
         //const parsedData = parseMetrics(metricsBlob.content);
 
         // Converting the Buffer into a string
-        const jsonString = JSON.stringify(metrics)
-        const parsedData = metricsFromJSON(jsonString/*metricsBlob.content*/);
+        //const jsonString = JSON.stringify(metrics)
+        const parsedData = metricsFromJSON(metricsBlob.content);
 
         console.log("parsedData:", parsedData);
         setData(parsedData);

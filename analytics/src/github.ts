@@ -75,7 +75,7 @@ async function createBlob(content: string, owner: string, repo: string) {
   console.log(response);
 }
 
-async function createTree(csv: string, owner: string, repo: string): Promise<string> {
+async function createTree(metrics: string, owner: string, repo: string): Promise<string> {
   console.log(`creating tree at ${owner}/${repo}`);
 
   const octokit = obtainOctokit();
@@ -87,10 +87,10 @@ async function createTree(csv: string, owner: string, repo: string): Promise<str
       repo,
       tree: [
         {
-          path: "metrics.csv",
+          path: "metrics.json",
           mode: "100644",
           type: "blob",
-          content: csv,
+          content: metrics,
         },
       ],
     }
