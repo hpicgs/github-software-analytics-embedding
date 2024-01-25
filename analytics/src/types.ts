@@ -3,12 +3,12 @@ export interface FileMetrics extends Metrics {
 }
 
 export interface Metrics {
-  loc: number;
-  noc: number;
-  cloc: number;
-  dc: number;
-  nof: number;
+  blanks: number;
+  code: number;
+  comments: number;
+  lines: number;
 }
+
 export interface MetricsTableData {
   header: string[];
   rows: FileMetrics[];

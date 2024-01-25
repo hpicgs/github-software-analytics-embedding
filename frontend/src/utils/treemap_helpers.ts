@@ -40,10 +40,9 @@ export function createFileTree(rows: FileMetrics[]): TreeNode {
 export function configFromFileTree(
   fileTreeRoot: TreeNode,
   valueMapping: ValueMapping = {
-    //Todo: change to include one functions and one comment metric
-    weights: "loc",
-    heights: "nof",
-    colors: "dc",
+    weights: "lines",
+    heights: "code",
+    colors: "comments",
   }
 ): Configuration {
   const config = new Configuration();

@@ -10,11 +10,15 @@ COPY analytics/src ./src
 COPY analytics/package.json .
 COPY analytics/pnpm-lock.yaml .
 COPY analytics/tsconfig.json .
+RUN mkdir /metrics
+VOLUME ["/metrics"]
+
 
 RUN pnpm install
 RUN pnpm run build
 
 RUN curl -vL --compressed https://github.com/XAMPPRocky/tokei/releases/download/v12.1.2/tokei-x86_64-unknown-linux-gnu.tar.gz --output tokei.tar.gz
 RUN tar -xvf tokei.tar.gz
+RUN ./tokei /repository --output json > /metrics/metrics.json
 
 CMD [ "node", "/build/index.js" ]

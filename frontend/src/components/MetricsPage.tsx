@@ -5,7 +5,7 @@ import RepoBreadcrumbs from "./RepoBreadcrumbs";
 
 export default function MetricsPage() {
   const { owner, repo, commitSHA, branch } = useParams();
-
+  console.log(owner, repo, commitSHA, branch);
   const breadcrumbs = [
     <Typography key="1" color="text.secondary">
       {owner}

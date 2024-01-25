@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="117px" preserveAspectRatio="none" style="width:231px;height:117px;" version="1.1" viewBox="0 0 231 117" width="231px" zoomAndPan="magnify"><defs/><g><ellipse cx="190.3701" cy="37.8774" fill="#F8F8F8" rx="29.8701" ry="12.8774" style="stroke: #383838; stroke-width: 0.5;"/><text fill="#000000" font-family="Tahoma, sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="38" x="171.3701" y="41.3618">github</text><ellipse cx="36.5772" cy="37.8774" fill="#F8F8F8" rx="30.5772" ry="12.8774" style="stroke: #383838; stroke-width: 0.5;"/><text fill="#000000" font-family="Tahoma, sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="39" x="17.0772" y="41.3618">index</text><ellipse cx="113.5269" cy="37.8774" fill="#F8F8F8" rx="35.5269" ry="12.8774" style="stroke: #383838; stroke-width: 0.5;"/><text fill="#000000" font-family="Tahoma, sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="46" x="90.5269" y="41.3618">metrics</text><!--MD5=[0190f419ef54fc162964943b68b4f170]
+entity _types--><rect fill="#F8F8F8" height="33.9688" rx="3" ry="3" style="stroke: #000000; stroke-width: 0.5;" width="55" x="86" y="73"/><text fill="#000000" font-family="Tahoma, sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="35" x="96" y="94.1387">types</text><!--MD5=[dc59b1e9447ba50fedf2d5c8b433c025]
+link <b>index</b> to github--><path d="M51.7931,26.5624 C59.2802,21.6645 68.6753,16.5022 78,14 C108.477,5.822 118.523,5.822 149,14 C156.576,16.033 164.199,19.8221 170.807,23.7987 " fill="none" id="&lt;b&gt;index&lt;/b&gt;-&gt;github" style="stroke: #000000; stroke-width: 1.0;"/><polygon fill="#000000" points="175.207,26.5624,169.7141,18.3876,170.9732,23.9025,165.4583,25.1617,175.207,26.5624" style="stroke: #000000; stroke-width: 1.0;"/><!--MD5=[44188fbefc7ea7ff759a9aeaf7dbfeed]
+link <b>index</b> to metrics--><path d="M67.1797,38 C68.9288,38 70.6778,38 72.4269,38 " fill="none" id="&lt;b&gt;index&lt;/b&gt;-&gt;metrics" style="stroke: #000000; stroke-width: 1.0;"/><polygon fill="#000000" points="77.6741,38,68.6741,34,72.6741,38,68.6741,42,77.6741,38" style="stroke: #000000; stroke-width: 1.0;"/><!--MD5=[46630db8a1d6e25ac2aac2403086c4e1]
+link metrics to _types--><path d="M113.5,51.1036 C113.5,56.0602 113.5,61.9482 113.5,67.5875 " fill="none" id="metrics-&gt;_types" style="stroke: #000000; stroke-width: 0.5;"/><polygon fill="#000000" points="113.5,72.6627,117.5,63.6627,113.5,67.6627,109.5,63.6627,113.5,72.6627" style="stroke: #000000; stroke-width: 0.5;"/><script type="text/plantuml"><![CDATA[MD5=[5982a3cdd97adbe0a87c18b6506b0e9e]
+@startuml
+
+scale max 1920 width
+top to bottom direction
+
+skinparam nodesep 11
+skinparam ranksep 22
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Tahoma
+skinparam defaultFontSize 12
+skinparam roundCorner 6
+skinparam dpi 150
+skinparam arrowColor black
+skinparam arrowThickness 0.5
+skinparam packageTitleAlignment left
+
+skinparam usecase {
+  borderThickness 0.5
+}
+
+skinparam rectangle {
+  borderThickness 0.5
+}
+
+skinparam component {
+  borderThickness 1
+}
+
+
+(github)
+(<b>index</b>)
+(metrics)
+rectangle "types" as _types
+
+
+(<b>index</b>) -[thickness=1]> (github)
+(<b>index</b>) -[thickness=1]> (metrics)
+(metrics) --> _types
+
+@enduml
+
+
+' View and edit on https://arkit.pro
+]]></script></g></svg>

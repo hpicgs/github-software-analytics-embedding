@@ -75,7 +75,7 @@ async function createBlob(content: string, owner: string, repo: string) {
   console.log(response);
 }
 
-async function createTree(csv: string, owner: string, repo: string): Promise<string> {
+async function createTree(metrics: string, owner: string, repo: string): Promise<string> {
   console.log(`creating tree at ${owner}/${repo}`);
 
   const octokit = obtainOctokit();
@@ -87,10 +87,10 @@ async function createTree(csv: string, owner: string, repo: string): Promise<str
       repo,
       tree: [
         {
-          path: "metrics.csv",
+          path: "metrics.json",
           mode: "100644",
           type: "blob",
-          content: csv,
+          content: metrics,
         },
       ],
     }
@@ -100,12 +100,12 @@ async function createTree(csv: string, owner: string, repo: string): Promise<str
   return response.data.sha;
 }
 
-export async function storeMetricsToRepo(metrics_csv: string, commit_sha: string, owner: string, repo: string) {
+export async function storeMetricsToRepo(metrics: string, commit_sha: string, owner: string, repo: string) {
   if (process.env.DEBUG) {
     console.log("DEBUG mode enabled, skipping GitHub API calls");
     return;
   }
 
-  const tree_sha = await createTree(metrics_csv, owner, repo);
+  const tree_sha = await createTree(metrics, owner, repo);
   await createRef(`refs/metrics/${commit_sha}`, tree_sha, owner, repo);
 }
