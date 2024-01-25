@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { metricsFromJSON, parseMetrics } from "../utils/parse";
-import MetricsTable from "./MetricsTable";
+import { metricsFromJSON } from "../utils/parse";
 import { getCommitSHA, getMetricsBlob } from "@/utils/github";
 import { MetricsTableData } from "@analytics/types";
 import { LinearProgress, Stack, Typography, Paper } from "@mui/material";

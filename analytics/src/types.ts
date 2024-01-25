@@ -3,15 +3,6 @@ export interface FileMetrics extends Metrics {
 }
 
 export interface Metrics {
-  loc: number;
-  noc: number;
-  cloc: number;
-  dc: number;
-  nof: number;
-}
-
-export interface TokeiMetrics {
-  filename: string;
   blanks: number;
   code: number;
   comments: number;
@@ -20,7 +11,7 @@ export interface TokeiMetrics {
 
 export interface MetricsTableData {
   header: string[];
-  rows: TokeiMetrics[];
+  rows: FileMetrics[];
 }
 
 export interface FileTree {
@@ -30,5 +21,5 @@ export interface FileTree {
 export interface TreeNode {
   name: string;
   children: TreeNode[];
-  metrics?: TokeiMetrics;
+  metrics?: Metrics;
 }

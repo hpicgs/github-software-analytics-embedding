@@ -1,7 +1,7 @@
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { MetricsTableData, TokeiMetrics } from "@analytics/types";
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { MetricsTableData, FileMetrics } from "@analytics/types";
 
-function getRowId(row: TokeiMetrics) {
+function getRowId(row: FileMetrics) {
     return row.filename;
 }
 

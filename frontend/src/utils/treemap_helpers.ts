@@ -1,13 +1,13 @@
-import { TokeiMetrics, Metrics, TreeNode } from "@analytics/types";
+import { FileMetrics, Metrics, TreeNode } from "@analytics/types";
 import { Configuration, NodeSort, Visualization } from "treemap";
 
 interface ValueMapping {
-  weights: keyof TokeiMetrics;
-  heights: keyof TokeiMetrics;
-  colors: keyof TokeiMetrics;
+  weights: keyof Metrics;
+  heights: keyof Metrics;
+  colors: keyof Metrics;
 }
 
-export function createFileTree(rows: TokeiMetrics[]): TreeNode {
+export function createFileTree(rows: FileMetrics[]): TreeNode {
   const rootNode = {
     name: "/",
     children: [],
