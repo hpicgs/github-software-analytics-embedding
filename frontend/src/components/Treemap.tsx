@@ -8,7 +8,7 @@ import {
   Configuration,
   Visualization,
   Renderer,
-} from "treemap";
+} from "treemap-renderer";
 
 export default function Treemap({ header, rows }: MetricsTableData) {
   const fileTree = createFileTree(rows);
@@ -31,19 +31,19 @@ export default function Treemap({ header, rows }: MetricsTableData) {
     canvas.dispose();
     // canvas.frameScale = [ 1.0, 1.0 ];
     canvas.renderer = visualization.renderer as Renderer;
-    console.log("cfg:", config);
+    // console.log("cfg:", config);
     loadConfig();
     //debugInit();
   }, []);
 
   function loadConfig() {
-    console.log("loadConfig");
+    // console.log("loadConfig");
     if (config && visualization && canvas) {
       visualization.configuration = config;
 
-      console.log("Visualization:", visualization);
-      console.log("Config:", visualization.configuration);
-      console.log("Canvas:", canvas);
+      // console.log("Visualization:", visualization);
+      // console.log("Config:", visualization.configuration);
+      // console.log("Canvas:", canvas);
 
       canvas.controller.update();
     } else {
@@ -52,11 +52,6 @@ export default function Treemap({ header, rows }: MetricsTableData) {
   }
 
   function debugInit() {
-    // TODO: input(s) for debug logging / exposing global variables?
-
-    // Enable debug logging
-    visualization.debug = true;
-
     (window as any)["gloperate"] = gloperate;
     (window as any)["canvas"] = canvas;
     (window as any)["context"] = canvas?.context;

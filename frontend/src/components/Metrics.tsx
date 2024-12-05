@@ -37,7 +37,7 @@ export default function Metrics({
       try {
         const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA);
         const parsedData = parseMetrics(metricsBlob.content);
-        console.log("parsedData:", parsedData);
+        // console.log("parsedData:", parsedData);
         setData(parsedData);
         setSize(metricsBlob.size);
       } catch (e) {

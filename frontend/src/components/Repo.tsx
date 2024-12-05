@@ -33,10 +33,10 @@ export default function Repo({ owner, repo }: RepoParams) {
   useEffect(() => {
     async function fetchData() {
       const branches = await getBranches(owner, repo);
-      console.log(branches);
+      // console.log(branches);
       setBranches(branches);
       const refs = await getMetricCommits(owner, repo);
-      console.log(refs);
+      // console.log(refs);
       setRefs(refs);
     }
     fetchData();

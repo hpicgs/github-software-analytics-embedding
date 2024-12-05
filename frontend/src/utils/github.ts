@@ -42,9 +42,9 @@ export async function getMetricsBlob(
     tree_sha,
   });
 
-  response.data.tree.map((object) => {
-    console.log(object.path, prettyBytes(object.size!));
-  });
+  // response.data.tree.map((object) => {
+  //   console.log(object.path, prettyBytes(object.size!));
+  // });
 
   return await Promise.all(
     files.map(async (file) => {
@@ -69,7 +69,7 @@ export async function getMetricsBlob(
         console.warn(`${file} not found in blob object`);
         return { content: "", size: 0 };
       }
-      console.log(blob_string);
+      // console.log(blob_string);
       return { content: blob_string, size: blob.data.size } as MetricsBlob;
     })
   );

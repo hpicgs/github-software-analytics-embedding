@@ -44,9 +44,9 @@ importers:
       react-router-dom:
         specifier: '6'
         version: 6.28.0(react-dom@18.1.0(react@18.1.0))(react@18.1.0)
-      treemap:
-        specifier: ./treemaps
-        version: link:treemaps
+      treemap-renderer:
+        specifier: ./treemap-renderer
+        version: link:treemap-renderer
     devDependencies:
       '@octokit/types':
         specifier: ^6.38.1
