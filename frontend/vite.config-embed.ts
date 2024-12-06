@@ -13,7 +13,7 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["treemap"],
+      include: ["treemap-renderer"],
     },
     build: {
       emptyOutDir: true,
@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }) => {
         fileName: "embed",
       },
       commonjsOptions: {
-        include: [/treemap/, /node_modules/],
+        include: [/treemap-renderer/, /node_modules/],
       },
     },
   };

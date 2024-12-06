@@ -57,6 +57,10 @@ web_modules/
 # Optional npm cache directory
 .npm
 
+# NPM Lock Files
+package-lock.json
+pnpm-lock.yaml
+
 # Optional eslint cache
 .eslintcache
 
@@ -207,3 +211,4 @@ frontend/embed/*
 !frontend/embed/embed.*.js
 
 analytics/build/*
+.DS_Store

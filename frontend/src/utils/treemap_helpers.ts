@@ -1,5 +1,5 @@
 import { FileMetrics, Metrics, TreeNode } from "@analytics/types";
-import { Configuration, NodeSort, Visualization } from "treemap";
+import { Configuration, NodeSort } from "treemap-renderer";
 
 interface ValueMapping {
   weights: keyof Metrics;
@@ -29,7 +29,7 @@ export function createFileTree(rows: FileMetrics[]): TreeNode {
     }, rootNode);
   });
 
-  console.log(rootNode);
+  // console.log(rootNode);
   if (rootNode.children.length === 1) {
     return rootNode.children[0];
   }
@@ -73,19 +73,19 @@ export function configFromFileTree(
   }
   buildEdges(fileTreeRoot);
 
-  console.log("names", names);
-  console.log("edges", edges);
-  console.log("weights", weights);
-  console.log("heights", heights);
-  console.log("colors", colors);
+  // console.log("names", names);
+  // console.log("edges", edges);
+  // console.log("weights", weights);
+  // console.log("heights", heights);
+  // console.log("colors", colors);
 
   config.colors = [
-    { identifier: "emphasis", space: "hex", value: "#00b0ff" },
-    { identifier: "auxiliary", space: "hex", values: ["#00aa5e", "#71237c"] },
-    { identifier: "inner", space: "hex", values: ["#e8eaee", "#eef0f4"] },
+    { identifier: "emphasis", colorspace: "hex", value: "#00b0ff" },
+    { identifier: "auxiliary", colorspace: "hex", values: ["#00aa5e", "#71237c"] },
+    { identifier: "inner", colorspace: "hex", values: ["#e8eaee", "#eef0f4"] },
     {
       identifier: "leaf",
-      space: "hex",
+      colorspace: "hex",
       values: [
         "#4575b4",
         "#91bfdb",
@@ -120,13 +120,11 @@ export function configFromFileTree(
 
   config.geometry = {
     parentLayer: { showRoot: false },
-    leafLayers: [
-      {
-        colorMap: "color:leaf",
-        height: "bufferView:heights-normalized",
-        colors: "bufferView:colors-normalized",
-      },
-    ],
+    leafLayer: {
+      colorMap: "color:leaf",
+      height: "bufferView:heights-normalized",
+      colors: "bufferView:colors-normalized",
+    },
     emphasis: { outline: new Array<number>(), highlight: new Array<number>() },
     heightScale: 0.5,
   };
@@ -137,12 +135,8 @@ export function configFromFileTree(
     numTopWeightNodes: 6,
     numTopHeightNodes: 6,
     numTopColorNodes: 6,
+    names: names
   };
-
-  config.labels.callback = (
-    idsToLabel: Set<number>,
-    callback: Visualization.NameSetCallback
-  ) => callback(names);
 
   config!.altered!.alter("labels");
 
@@ -199,6 +193,6 @@ export function configFromFileTree(
     },
   ];
 
-  console.log("Config", JSON.stringify(config, null, 2));
+  // console.log("Config", JSON.stringify(config, null, 2));
   return config;
 }
