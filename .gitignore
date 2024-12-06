@@ -211,3 +211,4 @@ frontend/embed/*
 !frontend/embed/embed.*.js
 
 analytics/build/*
+.DS_Store
