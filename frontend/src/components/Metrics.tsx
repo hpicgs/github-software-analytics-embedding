@@ -36,15 +36,11 @@ export default function Metrics({
       }
       try {
         const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA, ["metrics.json"]);
-        //const parsedData = parseMetrics(metricsBlob.content);
-
-        // Converting the Buffer into a string
-        //const jsonString = JSON.stringify(metrics)
         const parsedData = metricsFromJSON(metricsBlob.content);
 
         console.log("parsedData:", parsedData);
         setData(parsedData);
-        //setSize(metricsBlob.size);
+        setSize(metricsBlob.size);
       } catch (e) {
         console.error(e);
         setError(true);

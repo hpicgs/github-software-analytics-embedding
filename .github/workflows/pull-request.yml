@@ -30,10 +30,10 @@ jobs:
       - name: Install treemaps library 📦
         run: |
           cd frontend
-          git clone --branch hiviser_deployment https://${{ secrets.SEERENE_TREEMAPS_DEPLOY_USER }}:${{ secrets.SEERENE_TREEMAPS_DEPLOY_TOKEN }}@gitlab.hpi3d.de/seerene/treemaps.git
-          cd treemaps
+          git submodule add git@github.com:varg-dev/treemap-renderer.git
+          cd treemap-renderer
           npm install
-          npm run build-lib
+          npm run build
 
       - name: Install and Build 🔧
         run: |
