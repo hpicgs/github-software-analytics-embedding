@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Install pnpm ⚙
         uses: pnpm/action-setup@v4
@@ -42,9 +44,7 @@ jobs:
 
       - name: Install treemaps library 📦
         run: |
-          cd frontend
-          git submodule add git@github.com:varg-dev/treemap-renderer.git
-          cd treemap-renderer
+          cd frontend/treemap-renderer
           npm install
           npm run build
 

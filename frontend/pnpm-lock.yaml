@@ -51,6 +51,9 @@ importers:
       '@octokit/types':
         specifier: ^6.38.1
         version: 6.41.0
+      '@types/node':
+        specifier: ^22.10.1
+        version: 22.10.1
       '@types/papaparse':
         specifier: ^5.3.2
         version: 5.3.15

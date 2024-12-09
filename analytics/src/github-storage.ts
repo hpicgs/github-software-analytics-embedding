@@ -13,7 +13,7 @@ export async function storeInGitHub(file: string, benchmark = false) {
     console.log("GITHUB_REPOSITORY environment variable is not set");
     return;
   }
-  
+
   const repo_path = process.env.GITHUB_REPOSITORY;
   const [owner, repo] = repo_path.split("/");
   const commit_sha = process.env.GITHUB_SHA || "default_tag";
