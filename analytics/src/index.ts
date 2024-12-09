@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { storeInGitHub } from "./github-storage";
+import { storeInGitHub } from "./github-storage.js";
 
 if (!process.env.REPOSITORY_PATH) {
   throw new Error("REPOSITORY_PATH environment variable is not set");

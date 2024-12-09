@@ -1,12 +1,12 @@
 import "dotenv/config";
+import { Octokit } from "octokit"
 
-import { Octokit } from "octokit";
-import { createActionAuth } from "@octokit/auth-action";
 
-function obtainOctokit() {
+async function obtainOctokit(): Promise<Octokit> {
   let octokit: Octokit;
   if (process.env.GITHUB_ACTIONS) {
     console.log("Running in GitHub Actions, using @octokit/auth-action");
+    const { createActionAuth } = await import("@octokit/auth-action");
     octokit = new Octokit({ authStrategy: createActionAuth });
   } else {
     if (!process.env.GITHUB_TOKEN)
@@ -22,7 +22,7 @@ function obtainOctokit() {
 async function createTag(tag: string, message: string, object_sha: string, owner: string, repo: string) {
   console.log(`creating tag ${tag} - "${message}"`);
 
-  const octokit = obtainOctokit();
+  const octokit = await obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/tags`,
@@ -42,7 +42,7 @@ async function createTag(tag: string, message: string, object_sha: string, owner
 async function createRef(ref: string, sha: string, owner: string, repo: string) {
   console.log(`creating ref ${ref} for metrics tree ${sha}`);
 
-  const octokit = obtainOctokit();
+  const octokit = await obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/refs`,
@@ -60,7 +60,7 @@ async function createRef(ref: string, sha: string, owner: string, repo: string) 
 async function createBlob(content: string, owner: string, repo: string) {
   console.log(`creating blob with content: ${content.substring(0, 10)} ...`);
 
-  const octokit = obtainOctokit();
+  const octokit = await obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/blobs`,
@@ -78,7 +78,7 @@ async function createBlob(content: string, owner: string, repo: string) {
 async function createTree(metrics: string, owner: string, repo: string): Promise<string> {
   console.log(`creating tree at ${owner}/${repo}`);
 
-  const octokit = obtainOctokit();
+  const octokit = await obtainOctokit();
 
   const response = await octokit.request(
     `POST /repos/${owner}/${repo}/git/trees`,

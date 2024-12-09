@@ -1,6 +1,7 @@
 {
   "name": "github-software-analytics-embedding",
   "description": "Seminar Project of the Seminar \"Advanced Techniques for Analysis and Visualization of Software Data\" of CGS, HPI and DEF in the Summer Term 2022",
+  "type": "module",
   "scripts": {
     "start": "cross-env REPOSITORY_PATH=../analytics/src ts-node src/index.ts",
     "debug": "cross-env DEBUG=True REPOSITORY_PATH=../analytics/src ts-node src/index.ts",

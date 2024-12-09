@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { readFileSync } from "fs";
-import { storeMetricsToRepo } from "./github";
+import { storeMetricsToRepo } from "./github.js";
 
 export async function storeInGitHub(file: string, benchmark = false) {
   if (process.env.DEBUG) {

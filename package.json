@@ -1,0 +1,6 @@
+{
+	"dependencies": {
+		"@octokit/core": "^6.1.2",
+		"@tsconfig/node20": "^20.1.4"
+	}
+}
