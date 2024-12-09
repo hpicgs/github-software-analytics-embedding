@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Analytics Treemap Embedding Action 🚀
         uses: hpicgs/github-software-analytics-embedding@v0
