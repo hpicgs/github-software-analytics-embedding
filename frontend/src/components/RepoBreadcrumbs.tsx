@@ -1,9 +1,10 @@
+import React from 'react';
 import { Box, Stack, Breadcrumbs, Link } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Link as RouterLink } from "react-router-dom";
 
 interface RepoBreadcrumbsProps {
-  breadcrumbs: JSX.Element[];
+  breadcrumbs: React.ReactNode[];
 }
 
 export default function RepoBreadcrumbs({ breadcrumbs }: RepoBreadcrumbsProps) {

@@ -26,6 +26,10 @@ interface RepoParams {
   repo: string;
 }
 
+interface BranchType {
+  name: string;
+}
+
 export default function Repo({ owner, repo }: RepoParams) {
   const [refs, setRefs] = useState<ListRefsResponseType>();
   const [branches, setBranches] = useState<ListBranchesResponseType>();
@@ -66,7 +70,7 @@ export default function Repo({ owner, repo }: RepoParams) {
             </TableHead>
             <TableBody>
               {branches &&
-                branches.data.map((branch) => (
+                branches.data.map((branch: BranchType) => (
                   <TableRow
                     key={branch.name}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

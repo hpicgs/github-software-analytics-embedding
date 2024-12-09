@@ -51,7 +51,7 @@ export async function getMetricsBlob(
   return await Promise.all(
     files.map(async (file) => {
       const found_file = response.data.tree.find(
-        (object) => object.path == file
+        (object: { path: string }) => object.path == file
       );
 
       const file_sha = found_file?.sha;
