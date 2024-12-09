@@ -84,3 +84,8 @@ This repo uses the github git database API to store commit based software analyt
 ```
 docker build -t analytics . && docker run -it analytics
 ```
+## Testing Pipelines Locally
+https://github.com/nektos/act
+```
+gh extensions exec act
+```
