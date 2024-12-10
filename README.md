@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Analytics Treemap Embedding Action 🚀
         uses: hpicgs/github-software-analytics-embedding@v0
@@ -83,4 +83,9 @@ This repo uses the github git database API to store commit based software analyt
 ## Building and running the docker container locally
 ```
 docker build -t analytics . && docker run -it analytics
+```
+## Testing Pipelines Locally
+https://github.com/nektos/act
+```
+gh extensions exec act
 ```

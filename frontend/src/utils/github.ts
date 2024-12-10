@@ -2,6 +2,7 @@ import { Octokit } from "octokit";
 import { Buffer } from "buffer";
 import { Endpoints, GetResponseTypeFromEndpointMethod } from "@octokit/types";
 import prettyBytes from "pretty-bytes";
+import logger from "@frontend/utils/logger";
 
 const octokit = new Octokit();
 
@@ -27,12 +28,14 @@ export async function getMetricsBlob(
   owner: string,
   repo: string,
   commit_sha: string,
-  files: string[] = ["metrics.csv"]
+  files: string[] = ["metrics.json"]
 ): Promise<MetricsBlob[]> {
+  const ref_string = `metrics/${commit_sha}`;
+  logger.debug('ref_string', ref_string);
   const ref = await octokit.rest.git.getRef({
     owner,
     repo,
-    ref: `metrics/${commit_sha}`,
+    ref: ref_string,
   });
 
   const tree_sha = ref.data.object.sha;
@@ -42,19 +45,22 @@ export async function getMetricsBlob(
     tree_sha,
   });
 
-  // response.data.tree.map((object) => {
-  //   console.log(object.path, prettyBytes(object.size!));
-  // });
+  if (process.env.DEBUG) {
+    response.data.tree.map((object: { path: string; size?: number }) => {
+      logger.debug(object.path, prettyBytes(object.size!));
+    });
+  }
+
 
   return await Promise.all(
     files.map(async (file) => {
       const found_file = response.data.tree.find(
-        (object) => object.path == file
+        (object: { path: string }) => object.path == file
       );
 
       const file_sha = found_file?.sha;
       if (!file_sha) {
-        console.warn(`${file} not found in tree object`);
+        logger.warn(`${file} not found in tree object`);
         return { content: "", size: 0 };
       }
 
@@ -66,10 +72,10 @@ export async function getMetricsBlob(
 
       const blob_string = Buffer.from(blob.data.content, "base64").toString();
       if (!blob_string) {
-        console.warn(`${file} not found in blob object`);
+        logger.warn(`${file} not found in blob object`);
         return { content: "", size: 0 };
       }
-      // console.log(blob_string);
+      logger.debug(blob_string);
       return { content: blob_string, size: blob.data.size } as MetricsBlob;
     })
   );

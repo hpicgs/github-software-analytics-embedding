@@ -2,10 +2,12 @@ import { Box, Paper, Stack, Typography, Link } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import Metrics from "./Metrics";
 import RepoBreadcrumbs from "./RepoBreadcrumbs";
+import logger from "@frontend/utils/logger";
+
 
 export default function MetricsPage() {
   const { owner, repo, commitSHA, branch } = useParams();
-
+  logger.debug(owner, repo, commitSHA, branch);
   const breadcrumbs = [
     <Typography key="1" color="text.secondary">
       {owner}

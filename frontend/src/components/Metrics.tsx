@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { parseMetrics } from "../utils/parse";
-import MetricsTable from "./MetricsTable";
-import { getCommitSHA, getMetricsBlob } from "@/utils/github";
+import { metricsFromJSON } from "../utils/parse";
+import { getCommitSHA, getMetricsBlob } from "@frontend/utils/github";
 import { MetricsTableData } from "@analytics/types";
 import { LinearProgress, Stack, Typography, Paper } from "@mui/material";
-
 import Treemap from "./Treemap";
 import MetaMetrics from "./MetaMetrics";
 import NoMetrics from "./NoMetrics";
+import MetricsDataGrid from "./MetricsDataGrid";
+import logger from "@frontend/utils/logger";
 
 type MetricsProps = {
   owner?: string;
@@ -33,15 +33,17 @@ export default function Metrics({
       if (!commitSHA) {
         if (!branch) return;
         commitSHA = await getCommitSHA(owner, repo, branch);
+        logger.debug("commitSHA:", commitSHA);
       }
       try {
-        const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA);
-        const parsedData = parseMetrics(metricsBlob.content);
-        // console.log("parsedData:", parsedData);
+        const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA, ["metrics.json"]);
+        const parsedData = metricsFromJSON(metricsBlob.content);
+
+        logger.debug("parsedData:", parsedData);
         setData(parsedData);
         setSize(metricsBlob.size);
       } catch (e) {
-        console.error(e);
+        logger.error(e);
         setError(true);
       } finally {
         setLoading(false);
@@ -56,7 +58,7 @@ export default function Metrics({
       {error && <NoMetrics />}
       {data && <Treemap {...data} />}
       {data && size && <MetaMetrics size={size} {...data} />}
-      {data && <MetricsTable {...data} />}
+      {data && <MetricsDataGrid {...data} />}
     </Stack>
   );
 }

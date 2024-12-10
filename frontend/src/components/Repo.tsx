@@ -17,13 +17,18 @@ import {
   getMetricCommits,
   ListRefsResponseType,
   ListBranchesResponseType,
-} from "@/utils/github";
+} from "@frontend/utils/github";
 import RepoBreadcrumbs from "./RepoBreadcrumbs";
 import { Link as RouterLink } from "react-router-dom";
+import logger from "@frontend/utils/logger";
 
 interface RepoParams {
   owner: string;
   repo: string;
+}
+
+interface BranchType {
+  name: string;
 }
 
 export default function Repo({ owner, repo }: RepoParams) {
@@ -33,10 +38,10 @@ export default function Repo({ owner, repo }: RepoParams) {
   useEffect(() => {
     async function fetchData() {
       const branches = await getBranches(owner, repo);
-      // console.log(branches);
+      logger.debug("branches:", branches);
       setBranches(branches);
       const refs = await getMetricCommits(owner, repo);
-      // console.log(refs);
+      logger.debug("refs:", refs);
       setRefs(refs);
     }
     fetchData();
@@ -66,7 +71,7 @@ export default function Repo({ owner, repo }: RepoParams) {
             </TableHead>
             <TableBody>
               {branches &&
-                branches.data.map((branch) => (
+                branches.data.map((branch: BranchType) => (
                   <TableRow
                     key={branch.name}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

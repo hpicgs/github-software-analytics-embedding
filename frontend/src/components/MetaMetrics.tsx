@@ -8,7 +8,7 @@ interface MetaMetricsProps extends MetricsTableData {
 }
 
 export default function MetaMetrics({ header, rows, size }: MetaMetricsProps) {
-    const totalLoc = rows.reduce((acc, row) => acc + row.loc, 0);
+    const totalLoc = rows.reduce((acc, row) => acc + row.code, 0);
     return (
         <Container>
             <Stack direction="row" spacing={2}>
@@ -17,5 +17,5 @@ export default function MetaMetrics({ header, rows, size }: MetaMetricsProps) {
                 <Chip label={`${prettyBytes(size)} of metrics stored`} variant="outlined" />
             </Stack>
         </Container>
-  );
+    );
 }

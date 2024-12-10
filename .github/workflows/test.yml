@@ -14,10 +14,10 @@ jobs:
       # To use this repository's private action,
       # we must check out the repository
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Action 🚀
-        uses: ./ # Uses the action in the root directory
+        uses: ./ # Uses our action in the root directory
         with:
           benchmark: true
           # repository_path: ./testrepo

@@ -1,4 +1,4 @@
-import Metrics from "@/components/Metrics";
+import Metrics from "@frontend/components/Metrics";
 
 type EmbedProps = {
   owner?: string;
