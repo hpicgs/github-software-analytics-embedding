@@ -1,6 +1,5 @@
 import { configFromFileTree, createFileTree } from "@frontend/utils/treemap_helpers";
 import { MetricsTableData } from "@analytics/types";
-import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   gloperate,
