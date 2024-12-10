@@ -1,5 +1,6 @@
 import { FileMetrics, Metrics, TreeNode } from "@analytics/types";
 import { Configuration, NodeSort } from "treemap-renderer";
+import logger from "@frontend/utils/logger";
 
 interface ValueMapping {
   weights: keyof Metrics;
@@ -29,7 +30,7 @@ export function createFileTree(rows: FileMetrics[]): TreeNode {
     }, rootNode);
   });
 
-  // console.log(rootNode);
+  logger.debug(rootNode);
   if (rootNode.children.length === 1) {
     return rootNode.children[0];
   }
@@ -73,11 +74,11 @@ export function configFromFileTree(
   }
   buildEdges(fileTreeRoot);
 
-  // console.log("names", names);
-  // console.log("edges", edges);
-  // console.log("weights", weights);
-  // console.log("heights", heights);
-  // console.log("colors", colors);
+  logger.debug("names", names);
+  logger.debug("edges", edges);
+  logger.debug("weights", weights);
+  logger.debug("heights", heights);
+  logger.debug("colors", colors);
 
   config.colors = [
     { identifier: "emphasis", colorspace: "hex", value: "#00b0ff" },
@@ -193,6 +194,6 @@ export function configFromFileTree(
     },
   ];
 
-  // console.log("Config", JSON.stringify(config, null, 2));
+  logger.debug("Config", JSON.stringify(config, null, 2));
   return config;
 }

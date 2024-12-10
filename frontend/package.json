@@ -24,6 +24,7 @@
     "buffer": "^6.0.3",
     "isomorphic-fetch": "^3.0.0",
     "octokit": "^4.0.2",
+    "pino": "^9.5.0",
     "pretty-bytes": "^6.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { metricsFromJSON } from "../utils/parse";
-import { getCommitSHA, getMetricsBlob } from "@/utils/github";
+import { getCommitSHA, getMetricsBlob } from "@frontend/utils/github";
 import { MetricsTableData } from "@analytics/types";
 import { LinearProgress, Stack, Typography, Paper } from "@mui/material";
 import Treemap from "./Treemap";
 import MetaMetrics from "./MetaMetrics";
 import NoMetrics from "./NoMetrics";
 import MetricsDataGrid from "./MetricsDataGrid";
+import logger from "@frontend/utils/logger";
 
 type MetricsProps = {
   owner?: string;
@@ -32,17 +33,17 @@ export default function Metrics({
       if (!commitSHA) {
         if (!branch) return;
         commitSHA = await getCommitSHA(owner, repo, branch);
-        console.log(commitSHA);
+        logger.debug("commitSHA:", commitSHA);
       }
       try {
         const [metricsBlob] = await getMetricsBlob(owner, repo, commitSHA, ["metrics.json"]);
         const parsedData = metricsFromJSON(metricsBlob.content);
 
-        console.log("parsedData:", parsedData);
+        logger.debug("parsedData:", parsedData);
         setData(parsedData);
         setSize(metricsBlob.size);
       } catch (e) {
-        console.error(e);
+        logger.error(e);
         setError(true);
       } finally {
         setLoading(false);

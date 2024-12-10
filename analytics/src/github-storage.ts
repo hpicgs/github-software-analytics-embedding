@@ -1,16 +1,16 @@
 import "dotenv/config";
-
 import { readFileSync } from "fs";
 import { storeMetricsToRepo } from "./github.js";
+import logger from "./logger.js";
 
 export async function storeInGitHub(file: string, benchmark = false) {
   if (process.env.DEBUG) {
-    console.log("DEBUG mode enabled, skipping GitHub storage.");
+    logger.debug("DEBUG mode enabled, skipping GitHub storage.");
     return;
   }
 
   if (!process.env.GITHUB_REPOSITORY) {
-    console.log("GITHUB_REPOSITORY environment variable is not set");
+    logger.warn("GITHUB_REPOSITORY environment variable is not set");
     return;
   }
 

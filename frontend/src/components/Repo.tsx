@@ -17,9 +17,10 @@ import {
   getMetricCommits,
   ListRefsResponseType,
   ListBranchesResponseType,
-} from "@/utils/github";
+} from "@frontend/utils/github";
 import RepoBreadcrumbs from "./RepoBreadcrumbs";
 import { Link as RouterLink } from "react-router-dom";
+import logger from "@frontend/utils/logger";
 
 interface RepoParams {
   owner: string;
@@ -37,10 +38,10 @@ export default function Repo({ owner, repo }: RepoParams) {
   useEffect(() => {
     async function fetchData() {
       const branches = await getBranches(owner, repo);
-      // console.log(branches);
+      logger.debug("branches:", branches);
       setBranches(branches);
       const refs = await getMetricCommits(owner, repo);
-      // console.log(refs);
+      logger.debug("refs:", refs);
       setRefs(refs);
     }
     fetchData();

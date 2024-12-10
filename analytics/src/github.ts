@@ -1,11 +1,12 @@
 import "dotenv/config";
 import { Octokit } from "octokit"
+import logger from "./logger.js";
 
 
 async function obtainOctokit(): Promise<Octokit> {
   let octokit: Octokit;
   if (process.env.GITHUB_ACTIONS) {
-    console.log("Running in GitHub Actions, using @octokit/auth-action");
+    logger.debug("Running in GitHub Actions, using @octokit/auth-action");
     const { createActionAuth } = await import("@octokit/auth-action");
     octokit = new Octokit({ authStrategy: createActionAuth });
   } else {
@@ -20,7 +21,7 @@ async function obtainOctokit(): Promise<Octokit> {
 }
 
 async function createTag(tag: string, message: string, object_sha: string, owner: string, repo: string) {
-  console.log(`creating tag ${tag} - "${message}"`);
+  logger.debug(`creating tag ${tag} - "${message}"`);
 
   const octokit = await obtainOctokit();
 
@@ -36,11 +37,11 @@ async function createTag(tag: string, message: string, object_sha: string, owner
     }
   );
 
-  console.log(response);
+  logger.debug(response);
 }
 
 async function createRef(ref: string, sha: string, owner: string, repo: string) {
-  console.log(`creating ref ${ref} for metrics tree ${sha}`);
+  logger.debug(`creating ref ${ref} for metrics tree ${sha}`);
 
   const octokit = await obtainOctokit();
 
@@ -54,11 +55,11 @@ async function createRef(ref: string, sha: string, owner: string, repo: string) 
     }
   );
 
-  console.log(response);
+  logger.debug(response);
 }
 
 async function createBlob(content: string, owner: string, repo: string) {
-  console.log(`creating blob with content: ${content.substring(0, 10)} ...`);
+  logger.debug(`creating blob with content: ${content.substring(0, 10)} ...`);
 
   const octokit = await obtainOctokit();
 
@@ -72,11 +73,11 @@ async function createBlob(content: string, owner: string, repo: string) {
     }
   );
 
-  console.log(response);
+  logger.debug(response);
 }
 
 async function createTree(metrics: string, owner: string, repo: string): Promise<string> {
-  console.log(`creating tree at ${owner}/${repo}`);
+  logger.debug(`creating tree at ${owner}/${repo}`);
 
   const octokit = await obtainOctokit();
 
@@ -96,13 +97,13 @@ async function createTree(metrics: string, owner: string, repo: string): Promise
     }
   );
 
-  console.log(response);
+  logger.debug(response);
   return response.data.sha;
 }
 
 export async function storeMetricsToRepo(metrics: string, commit_sha: string, owner: string, repo: string) {
   if (process.env.DEBUG) {
-    console.log("DEBUG mode enabled, skipping GitHub API calls");
+    logger.debug("DEBUG mode enabled, skipping GitHub API calls");
     return;
   }
 

@@ -1,4 +1,4 @@
-import { configFromFileTree, createFileTree } from "@/utils/treemap_helpers";
+import { configFromFileTree, createFileTree } from "@frontend/utils/treemap_helpers";
 import { MetricsTableData } from "@analytics/types";
 import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import {
   Visualization,
   Renderer,
 } from "treemap-renderer";
+import logger from '@frontend/utils/logger';
 
 export default function Treemap({ header, rows }: MetricsTableData) {
   const fileTree = createFileTree(rows);
@@ -31,19 +32,19 @@ export default function Treemap({ header, rows }: MetricsTableData) {
     canvas.dispose();
     // canvas.frameScale = [ 1.0, 1.0 ];
     canvas.renderer = visualization.renderer as Renderer;
-    // console.log("cfg:", config);
+    logger.debug("cfg:", config);
     loadConfig();
     //debugInit();
   }, []);
 
   function loadConfig() {
-    // console.log("loadConfig");
+    logger.debug("loadConfig");
     if (config && visualization && canvas) {
       visualization.configuration = config;
 
-      // console.log("Visualization:", visualization);
-      // console.log("Config:", visualization.configuration);
-      // console.log("Canvas:", canvas);
+      logger.debug("Visualization:", visualization);
+      logger.debug("Config:", visualization.configuration);
+      logger.debug("Canvas:", canvas);
 
       canvas.controller.update();
     } else {
@@ -62,6 +63,8 @@ export default function Treemap({ header, rows }: MetricsTableData) {
 
   const width = 1440 / window.devicePixelRatio;
   const height = 720 / window.devicePixelRatio;
+
+  logger.info('Treemap component loaded');
 
   return (
     <div
