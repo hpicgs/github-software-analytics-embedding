@@ -4,4 +4,4 @@ const logger = pino({
     level: import.meta.env.DEBUG ? 'debug' : 'info',
 });
 
-export default logger; 
+export default logger;
